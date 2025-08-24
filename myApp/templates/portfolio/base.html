@@ -1,0 +1,338 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}Julia Victorio - Portfolio{% endblock %}</title>
+  <meta name="description" content="Full-stack Django developer & AI integrator. Public speaker, tech coach, and advocate for inclusive technology." />
+  <!-- Theme color set to Primary Navy -->
+  <meta name="theme-color" content="#1E3A8A" />
+
+  <!-- Canonical & Favicon -->
+  <link rel="canonical" href="/" />
+  <link rel="icon" href="{% static 'favicon.svg' %}" type="image/svg+xml" />
+
+  <!-- Tailwind (CDN). For production, compile Tailwind. -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','ui-sans-serif','system-ui','Segoe UI','Roboto','Helvetica Neue','Arial'] }
+        }
+      }
+    }
+  </script>
+
+  <!-- Font Awesome (your requested version) -->
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+
+  <!-- Inter font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+
+  <style>
+    :root{
+      --navy: #1E3A8A;
+      --black: #000000;
+      --gold: #D4AF37;
+      --bg: #FFFFFF;
+    }
+
+    html { scroll-behavior: smooth; }
+    /* Keep anchors visible under sticky header */
+    section[id] { scroll-margin-top: 96px; }
+
+    /* Simple reveal utility (fails open if JS disabled) */
+    .reveal { opacity: 0; transform: translateY(12px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.show { opacity: 1; transform: translateY(0); }
+
+    /* Subtle site-wide background:
+       - base white
+       - faint navy glow top-right
+       - faint gold glow bottom-left
+    */
+    body {
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(42rem 42rem at 120% -10%, rgba(30,58,138,0.06), transparent 60%),
+        radial-gradient(34rem 34rem at -10% 120%, rgba(212,175,55,0.07), transparent 60%);
+      background-attachment: fixed;
+    }
+  </style>
+  <noscript>
+    <style>.reveal{opacity:1 !important; transform:none !important;}</style>
+  </noscript>
+
+  {% block head_extra %}{% endblock %}
+</head>
+<body class="font-sans text-black bg-white">
+  <!-- Skip link for accessibility -->
+  <a href="#content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 bg-black text-white px-3 py-2 rounded">Skip to content</a>
+
+  <!-- Sticky, glassy header with mobile menu -->
+  <header class="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-white/70 bg-white/90 border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+      <a href="/" class="text-xl font-extrabold tracking-tight hover:text-[#D4AF37] transition-colors">Julia Victorio</a>
+
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a href="#about" class="hover:text-[#1E3A8A] transition-colors">About</a>
+        <a href="#process" class="hover:text-[#1E3A8A] transition-colors">Process</a>
+        <a href="#services" class="hover:text-[#1E3A8A] transition-colors">Services</a>
+        <a href="#projects" class="hover:text-[#1E3A8A] transition-colors">Projects</a>
+        <a href="#contact" class="hover:text-[#1E3A8A] transition-colors">Contact</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a href="#contact"
+           class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1E3A8A] text-white hover:bg-[#172C6C] shadow-sm transition-all active:scale-[.98]">
+          <i class="fa-solid fa-paper-plane"></i><span>Work with me</span>
+        </a>
+        <button id="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav"
+                class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border hover:bg-black/5">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile nav panel -->
+    <div id="mobile-nav" class="md:hidden hidden border-t bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 grid gap-2 text-sm">
+        <a href="#about" class="py-2 hover:text-[#1E3A8A]">About</a>
+        <a href="#process" class="py-2 hover:text-[#1E3A8A]">Process</a>
+        <a href="#services" class="py-2 hover:text-[#1E3A8A]">Services</a>
+        <a href="#projects" class="py-2 hover:text-[#1E3A8A]">Projects</a>
+        <a href="#contact" class="py-2 hover:text-[#1E3A8A]">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="border-t mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 grid gap-6 md:grid-cols-3 text-sm text-black/70">
+      <div>
+        <div class="font-semibold text-black">Let’s build something people need.</div>
+        <p class="mt-2">Websites • AI tools • Coaching • Speaking</p>
+      </div>
+      <div>
+        <div class="font-semibold text-black">Contact</div>
+        <p class="mt-2">
+          <i class="fa-regular fa-envelope mr-2 text-[#D4AF37]"></i>
+          <a href="mailto:juliavictorio16@Gmail.com" class="hover:text-[#1E3A8A]">juliavictorio16@Gmail.com</a>
+        </p>
+      </div>
+      
+    </div>
+    <div class="text-center text-xs text-black/60 pb-8">
+      © {% now "Y" %} Julia Victorio. All rights reserved.
+    </div>
+  </footer>
+
+
+  <!-- Julia – AI Assistant Widget (with typing + typewriter + powered-by) -->
+<style>
+  /* typing dots animation */
+  @keyframes julia-dot {
+    0%   { opacity:.25; transform:translateY(0) }
+    20%  { opacity:1;   transform:translateY(-2px) }
+    100% { opacity:.25; transform:translateY(0) }
+  }
+  .julia-typing span { display:inline-block; margin:0 .175rem; animation:julia-dot 1s infinite }
+  .julia-typing span:nth-child(2){ animation-delay:.15s }
+  .julia-typing span:nth-child(3){ animation-delay:.3s }
+</style>
+
+<button id="julia-open"
+        class="fixed bottom-6 right-6 z-40 h-12 px-4 rounded-full shadow-lg
+               bg-[#1E3A8A] hover:bg-[#172C6C] text-white font-semibold
+               inline-flex items-center gap-2">
+  <i class="fa-solid fa-message"></i>
+  Chat with Julia
+</button>
+
+<div id="julia-modal" class="hidden fixed inset-0 z-50">
+  <!-- backdrop -->
+  <div class="absolute inset-0 bg-black/40" aria-hidden="true"></div>
+
+  <!-- panel -->
+  <div class="absolute right-4 bottom-4 w-full max-w-md sm:right-6 sm:bottom-6">
+    <div class="rounded-2xl overflow-hidden shadow-2xl bg-white border">
+      <div class="flex items-center justify-between px-4 py-3 border-b bg-[#1E3A8A] text-white">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full bg-white/15 grid place-items-center">
+            <i class="fa-solid fa-robot"></i>
+          </div>
+          <div>
+            <div class="font-semibold">Julia (AI)</div>
+            <div class="text-xs text-white/80">Friendly assistant</div>
+          </div>
+        </div>
+        <button id="julia-close" class="w-8 h-8 grid place-items-center rounded-lg hover:bg-white/10">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div id="julia-thread"
+           class="px-4 py-3 space-y-3 h-80 overflow-y-auto
+                  bg-[radial-gradient(40rem_40rem_at_120%_-10%,rgba(30,58,138,0.06),transparent_60%),radial-gradient(30rem_30rem_at_-10%_120%,rgba(212,175,55,0.07),transparent_60%)]">
+        <div class="max-w-[85%] rounded-2xl px-3 py-2 text-sm bg-black/5 text-black">
+          Hi! I’m Julia’s AI assistant. Ask me about services, timelines, or the best next step for your project.
+        </div>
+      </div>
+
+      <form id="julia-form" class="flex items-end gap-2 p-3 border-t bg-white">
+        <textarea id="julia-input" rows="1" placeholder="Type your message…  (Enter to send • Shift+Enter for a new line)" required
+                  class="flex-1 resize-none rounded-xl border px-3 py-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A]"></textarea>
+        <button type="submit" class="h-10 px-4 rounded-xl bg-black text-white hover:bg-black/90 font-semibold">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </form>
+
+
+      <!-- Powered by -->
+      <div class="px-4 pb-3 text-[10px] text-right text-black/50 bg-white">
+        Powered by <span class="font-semibold">Julia Victorio</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const openBtn = document.getElementById('julia-open');
+  const modal   = document.getElementById('julia-modal');
+  const closeBtn= document.getElementById('julia-close');
+  const form    = document.getElementById('julia-form');
+  const input   = document.getElementById('julia-input');
+  const thread  = document.getElementById('julia-thread');
+
+  let history = [];
+
+  function toggle(open) {
+    modal.classList.toggle('hidden', !open);
+    if (open) setTimeout(() => input?.focus(), 50);
+  }
+
+  function bubble(content, who='assistant') {
+    const wrap = document.createElement('div');
+    wrap.className = who === 'user'
+      ? "ml-auto max-w-[85%] rounded-2xl px-3 py-2 text-sm bg-[#1E3A8A] text-white"
+      : "max-w-[85%] rounded-2xl px-3 py-2 text-sm bg-black/5 text-black";
+    wrap.textContent = content || "";
+    thread.appendChild(wrap);
+    thread.scrollTop = thread.scrollHeight;
+    return wrap;
+  }
+
+  function typingIndicator() {
+    const wrap = document.createElement('div');
+    wrap.className = "max-w-[85%] rounded-2xl px-3 py-2 text-sm bg-black/5 text-black julia-typing";
+    wrap.innerHTML = '<span>•</span><span>•</span><span>•</span>';
+    thread.appendChild(wrap);
+    thread.scrollTop = thread.scrollHeight;
+    return wrap;
+  }
+  
+
+  const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+  async function typewrite(text, el, speed = 18) {
+    // simple typewriter: adds one character at a time
+    let i = 0;
+    while (i <= text.length) {
+      el.textContent = text.slice(0, i);
+      thread.scrollTop = thread.scrollHeight;
+      const prev = text[i - 1];
+      const delay = (prev === ' ' || prev === '\n') ? Math.max(6, speed - 8) : speed;
+      await sleep(delay);
+      i++;
+    }
+  }
+
+  // Enter to send, Shift+Enter for newline, respect IME composition
+input.addEventListener('keydown', (e) => {
+  const isEnter = (e.key === 'Enter' || e.keyCode === 13);
+  if (isEnter && !e.shiftKey && !e.isComposing) {
+    e.preventDefault();
+    form.requestSubmit(); // triggers the form's submit handler below
+  }
+});
+
+
+  openBtn.addEventListener('click', () => toggle(true));
+  closeBtn.addEventListener('click', () => toggle(false));
+  modal.addEventListener('click', (e) => { if (e.target === modal) toggle(false); });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const text = input.value.trim();
+    if (!text) return;
+
+    bubble(text, 'user');
+    history.push({role:'user', content:text});
+    input.value = "";
+
+    const typing = typingIndicator();
+
+    try {
+      const resp = await fetch("{% url 'ai_chat' %}", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text, history })
+      });
+      const data = await resp.json();
+      typing.remove();
+
+      if (data.answer) {
+        const ans = bubble("", 'assistant');
+        await typewrite(data.answer, ans, 16); // tweak speed here
+        history.push({role:'assistant', content:data.answer});
+      } else {
+        bubble("Sorry-something went wrong. Please try again.", 'assistant');
+      }
+    } catch (err) {
+      typing.remove();
+      bubble("Network error-please try again.", 'assistant');
+    }
+  });
+})();
+
+
+</script>
+
+
+  <!-- Tiny JS: mobile menu + reveal-on-scroll -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('menu-btn');
+      const panel = document.getElementById('mobile-nav');
+      if (btn && panel) {
+        btn.addEventListener('click', () => {
+          const isHidden = panel.classList.toggle('hidden');
+          btn.setAttribute('aria-expanded', String(!isHidden));
+        });
+      }
+
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('show');
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    });
+  </script>
+</body>
+</html>

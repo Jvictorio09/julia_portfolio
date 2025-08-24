@@ -3,6 +3,9 @@ import os
 
 from dotenv import load_dotenv
 load_dotenv
+import os
+import dj_database_url
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -17,7 +20,7 @@ SECRET_KEY = 'django-insecure-r)3oy#n_xqo8=kx%^=#@-(4h#wach_j)&hi6supwvf53!w*%5o
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*',]
+ALLOWED_HOSTS = ['*', 'juliaportfolio-production.up.railway.app',]
 
 
 # Application definition
