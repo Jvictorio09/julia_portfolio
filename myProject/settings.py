@@ -10,6 +10,12 @@ import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+def env_int(key: str, default: int) -> int:
+    try:
+        return int(os.environ.get(key, default))
+    except (TypeError, ValueError):
+        return default
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -165,3 +171,28 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", "django.core.mail.backends.smtp.EmailBackend")
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
+
+# Default: TLS on 587 (works for Gmail). Flip to SSL/465 by setting EMAIL_USE_SSL=True.
+if env_bool("EMAIL_USE_SSL", False):
+    EMAIL_PORT = env_int("EMAIL_PORT", 465)
+    EMAIL_USE_SSL = True
+    EMAIL_USE_TLS = False
+else:
+    EMAIL_PORT = env_int("EMAIL_PORT", 587)
+    EMAIL_USE_TLS = env_bool("EMAIL_USE_TLS", True)
+    EMAIL_USE_SSL = False
+
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "juliavictorio16@gmail.com")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")  # Gmail App Password
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", f"Julia Victorio <{EMAIL_HOST_USER}>")
+SERVER_EMAIL = os.environ.get("SERVER_EMAIL", DEFAULT_FROM_EMAIL)  # used by Django for error mails
+CONTACT_TO = os.environ.get("CONTACT_TO", "juliavictorio16@gmail.com")
+EMAIL_TIMEOUT = env_int("EMAIL_TIMEOUT", 20)
+
+# Where contact messages go:
+CONTACT_TO = "juliavictorio16@gmail.com"
