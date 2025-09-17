@@ -5,10 +5,12 @@ from dotenv import load_dotenv
 load_dotenv
 import os
 import dj_database_url
+from pathlib import Path
+import os
+from dotenv import load_dotenv
 
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
 
 def env_int(key: str, default: int) -> int:
     try:
@@ -196,3 +198,11 @@ EMAIL_TIMEOUT = env_int("EMAIL_TIMEOUT", 20)
 
 # Where contact messages go:
 CONTACT_TO = "juliavictorio16@gmail.com"
+
+
+import os
+
+STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY")
+STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY")
+STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET", "")
+DOMAIN = os.environ.get("DOMAIN", "http://localhost:8000")
