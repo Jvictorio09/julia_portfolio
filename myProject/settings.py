@@ -28,7 +28,19 @@ SECRET_KEY = 'django-insecure-r)3oy#n_xqo8=kx%^=#@-(4h#wach_j)&hi6supwvf53!w*%5o
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', 'juliaportfolio-production.up.railway.app',]
+ALLOWED_HOSTS = [
+    "*",  # not ideal for prod, but safe enough for Railway demo
+    "juliaportfolio-production.up.railway.app",
+]
+
+# CSRF trusted origins (must include your Railway URL + any custom domain)
+CSRF_TRUSTED_ORIGINS = [
+    "https://juliaportfolio-production.up.railway.app",
+]
+
+# If you’re embedding in iframe
+X_FRAME_OPTIONS = "ALLOWALL"
+
 
 
 # Application definition
