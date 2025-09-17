@@ -159,151 +159,157 @@ def ai_chat(request):
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
 
-
-import json, os
+# myApp/views.py
+import os, json, requests
 from decimal import Decimal
 from django.conf import settings
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
-from django.utils.html import escape
-
 import stripe
 
-# --- Stripe keys ---
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 def _usd_cents(amount_str: str) -> int:
-    """Sanitize to positive USD cents."""
     try:
-        amt = Decimal(amount_str or "0").quantize(Decimal("0.01"))
-        if amt <= 0:
-            return 0
-        return int(amt * 100)
+        amt = Decimal(str(amount_str or "0")).quantize(Decimal("0.01"))
+        return int(amt * 100) if amt > 0 else 0
     except Exception:
         return 0
 
-# ========== Widget page ==========
+def _url(base: str, path: str) -> str:
+    return base.rstrip("/") + "/" + path.lstrip("/")
+
 def widget(request):
-    """
-    Render the iframe-friendly donation form.
-    URL: /donate/widget?org=solutions-for-change
-    """
-    org = request.GET.get("org", "solutions-for-change")
-    context = {"org": org, "publishable_key": settings.STRIPE_PUBLISHABLE_KEY}
-    return render(request, "solutions_for_change.html", context)
+    ctx = {
+        "org": request.GET.get("org", "solutions-for-change"),
+        "RECAPTCHA_SITE_KEY": getattr(settings, "RECAPTCHA_SITE_KEY", ""),
+    }
+    return render(request, "solutions_for_change.html", ctx)
 
-# ========== Create Checkout Session ==========
+def _verify_recaptcha(token: str) -> bool:
+    secret = getattr(settings, "RECAPTCHA_SECRET_KEY", "")
+    if not secret:
+        return True  # skip if not configured
+    try:
+        r = requests.post("https://www.google.com/recaptcha/api/siteverify",
+                          data={"secret": secret, "response": token}, timeout=10)
+        return r.json().get("success", False)
+    except Exception:
+        return False
+
 class CreateCheckoutSessionView(View):
+    """
+    Handles one-time and recurring (monthly/quarterly/yearly) via Checkout.
+    Uses dynamic price_data (no pre-created Products).
+    """
     def post(self, request, *args, **kwargs):
-        data = request.POST
+        # reCAPTCHA
+        if not _verify_recaptcha(request.POST.get("g-recaptcha-response", "")):
+            return JsonResponse({"error": "Invalid reCAPTCHA. Please try again."}, status=400)
 
-        custom_amount = data.get("amount")
-        recurring_amount = data.get("recurring")
+        data = request.POST
+        amount_cents = _usd_cents(data.get("amount"))
+        frequency    = (data.get("frequency") or "one_time").lower().strip()
+
+        if amount_cents <= 0:
+            return HttpResponseBadRequest("Invalid amount")
 
         donor = {
             "first_name": data.get("first_name", ""),
-            "last_name": data.get("last_name", ""),
-            "email": data.get("email", ""),
-            "mobile": data.get("mobile", ""),
-            "address": data.get("address", ""),
-            "city": data.get("city", ""),
-            "state": data.get("state", ""),
-            "country": data.get("country", ""),
-            "postal_code": data.get("postal_code", ""),
-            "message": data.get("message", ""),
-            "org": data.get("org", "solutions-for-change"),
+            "last_name":  data.get("last_name", ""),
+            "email":      data.get("email", ""),
+            "mobile":     data.get("mobile", ""),
+            "address":    data.get("address", ""),
+            "city":       data.get("city", ""),
+            "state":      data.get("state", ""),
+            "country":    data.get("country", ""),
+            "postal_code":data.get("postal_code", ""),
+            "message":    data.get("message", ""),
+            "org":        data.get("org", "solutions-for-change"),
+            "frequency":  frequency,
         }
 
-        def usd_cents(s):
-            from decimal import Decimal
-            try:
-                val = Decimal(s or "0").quantize(Decimal("0.01"))
-                return int(val * 100) if val > 0 else 0
-            except Exception:
-                return 0
+        success = _url(settings.DOMAIN, "donate/success/")
+        cancel  = _url(settings.DOMAIN, "donate/cancel/")
 
-        # ➜ MONTHLY (no pre-created Product needed)
-        if recurring_amount:
-            unit_amount = usd_cents(recurring_amount)
-            if unit_amount <= 0:
-                return HttpResponseBadRequest("Invalid monthly amount")
-
-            try:
+        try:
+            if frequency == "one_time":
                 session = stripe.checkout.Session.create(
-                    mode="subscription",
+                    mode="payment",
                     payment_method_types=["card"],
-                   
+                    customer_creation="if_required",
                     line_items=[{
                         "quantity": 1,
                         "price_data": {
                             "currency": "usd",
-                            "unit_amount": unit_amount,
-                            "recurring": {"interval": "month"},
-                            "product_data": {"name": "Monthly Donation"},
+                            "unit_amount": amount_cents,
+                            "product_data": {"name": "Donation"},
+                        }
+                    }],
+                    customer_email=donor.get("email") or None,
+                    success_url=success,
+                    cancel_url=cancel,
+                    metadata=donor,
+                    payment_intent_data={"metadata": donor},
+                )
+            else:
+                # map frequency -> Stripe recurring config
+                interval = "month"
+                interval_count = 1
+                if frequency == "quarterly":
+                    interval = "month"; interval_count = 3
+                elif frequency == "yearly":
+                    interval = "year"; interval_count = 1
+                elif frequency == "monthly":
+                    interval = "month"; interval_count = 1
+                else:
+                    # default to monthly if unknown
+                    interval = "month"; interval_count = 1
+
+                session = stripe.checkout.Session.create(
+                    mode="subscription",
+                    payment_method_types=["card"],
+                    line_items=[{
+                        "quantity": 1,
+                        "price_data": {
+                            "currency": "usd",
+                            "unit_amount": amount_cents,
+                            "recurring": {"interval": interval, "interval_count": interval_count},
+                            "product_data": {"name": f"Recurring Donation ({frequency.title()})"},
                         },
                     }],
-                    success_url=f"{settings.DOMAIN}/donate/success",
-                    cancel_url=f"{settings.DOMAIN}/donate/cancel",
+                    customer_email=donor.get("email") or None,
+                    success_url=success,
+                    cancel_url=cancel,
                     metadata=donor,
                     subscription_data={"metadata": donor},
                 )
-                return redirect(session.url, code=303)
-            except Exception as e:
-                return JsonResponse({"error": str(e)}, status=400)
 
-        # ➜ ONE-TIME (unchanged – also no product needed)
-        amount = usd_cents(custom_amount)
-        if amount <= 0:
-            return HttpResponseBadRequest("Invalid amount")
-        try:
-            session = stripe.checkout.Session.create(
-                mode="payment",
-                payment_method_types=["card"],
-                customer_creation="if_required",
-                line_items=[{
-                    "quantity": 1,
-                    "price_data": {
-                        "currency": "usd",
-                        "unit_amount": amount,
-                        "product_data": {"name": "Donation"},
-                    }
-                }],
-                success_url=f"{settings.DOMAIN}/donate/success",
-                cancel_url=f"{settings.DOMAIN}/donate/cancel",
-                metadata=donor,
-                payment_intent_data={"metadata": donor},
-            )
             return redirect(session.url, code=303)
+
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=400)
 
-
-# ========== Webhook ==========
 @csrf_exempt
 def stripe_webhook(request):
     payload = request.body
     sig_header = request.META.get("HTTP_STRIPE_SIGNATURE", "")
-    endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
-
+    secret = settings.STRIPE_WEBHOOK_SECRET or ""
     try:
-        event = stripe.Webhook.construct_event(payload, sig_header, endpoint_secret)
-    except ValueError:
-        return HttpResponseBadRequest("Invalid payload")
-    except stripe.error.SignatureVerificationError:
-        return HttpResponseBadRequest("Invalid signature")
+        event = stripe.Webhook.construct_event(payload, sig_header, secret) if secret else json.loads(payload)
+    except Exception:
+        return HttpResponseBadRequest("Invalid webhook")
 
-    # Handle a few key events
-    if event["type"] == "checkout.session.completed":
-        # For one-time payments, you can read event.data.object.payment_intent
-        # For subscriptions, event.data.object.subscription will be set
-        session = event["data"]["object"]
-        # TODO: record to DB / send internal email if needed
-        # metadata = session.get("metadata", {})
-    elif event["type"] in ("invoice.paid", "customer.subscription.created"):
+    # Handle core events (expand as needed)
+    etype = event.get("type")
+    if etype == "checkout.session.completed":
+        # session = event["data"]["object"]
         pass
-    elif event["type"] in ("invoice.payment_failed", "customer.subscription.deleted"):
+    elif etype == "invoice.paid":
+        pass
+    elif etype == "invoice.payment_failed":
         pass
 
     return HttpResponse(status=200)

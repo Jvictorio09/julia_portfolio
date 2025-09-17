@@ -5,58 +5,59 @@
   <title>Donate | Solutions for Change</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- reCAPTCHA v2 Checkbox -->
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body class="bg-gray-50">
   <div class="min-h-screen flex items-center justify-center py-12 px-4">
     <div class="bg-white w-full max-w-2xl shadow-lg rounded-2xl p-8">
-      
+
       <!-- Logo -->
       <div class="flex justify-center mb-6">
-        <img src="https://cdn.firespring.com/images/0b974cf8-0458-4725-9471-35159151de5e.png" 
+        <img src="https://cdn.firespring.com/images/0b974cf8-0458-4725-9471-35159151de5e.png"
              alt="Solutions for Change" class="h-20">
       </div>
 
       <h1 class="text-center text-2xl font-bold text-gray-800 mb-2">Support Solutions for Change</h1>
       <p class="text-center text-gray-600 mb-8">Your gift helps transform lives and create lasting impact.</p>
 
-      <!-- Donation options -->
-      <h2 class="text-lg font-semibold mb-3">Choose your donation amount</h2>
-      <div class="flex flex-wrap gap-3 justify-center mb-6">
-        <button type="button" class="donation-btn px-5 py-3 rounded-full border-2 border-gray-300 hover:border-blue-600 hover:text-blue-600 transition" data-amount="30">$30</button>
-        <button type="button" class="donation-btn px-5 py-3 rounded-full border-2 border-gray-300 hover:border-blue-600 hover:text-blue-600 transition" data-amount="60">$60</button>
-        <button type="button" class="donation-btn px-5 py-3 rounded-full border-2 border-gray-300 hover:border-blue-600 hover:text-blue-600 transition" data-amount="100">$100</button>
-        <input id="custom-amount" type="number" min="1" step="1" placeholder="Other amount"
-               class="border-2 rounded-full px-4 py-3 w-40 text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
+      <!-- Choose amount -->
+      <h2 class="text-lg font-semibold mb-3 text-center">Choose amount</h2>
+      <div class="flex flex-wrap gap-3 justify-center mb-4">
+        <button type="button" class="donation-btn px-6 py-3 rounded-lg border-2 border-gray-300 hover:border-blue-600 hover:text-blue-600 transition" data-amount="30">$30</button>
+        <button type="button" class="donation-btn px-6 py-3 rounded-lg border-2 border-gray-300 hover:border-blue-600 hover:text-blue-600 transition" data-amount="60">$60</button>
+        <button type="button" class="donation-btn px-6 py-3 rounded-lg border-2 border-gray-300 hover:border-blue-600 hover:text-blue-600 transition" data-amount="100">$100</button>
+        <button type="button" class="donation-btn px-6 py-3 rounded-lg border-2 border-gray-300 hover:border-blue-600 hover:text-blue-600 transition" data-amount="1">$1</button>
+        <input id="custom-amount" type="number" min="1" step="1" placeholder="Other"
+               class="border-2 rounded-lg px-4 py-3 w-28 text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
       </div>
-      <p class="text-center text-sm text-gray-500 mb-6">🔒 Secure & Encrypted Payment</p>
 
-      <!-- Recurring -->
-      <h2 class="text-lg font-semibold mb-3">Make it monthly</h2>
-      <div class="grid grid-cols-2 gap-3 mb-8">
-        <label class="flex items-center justify-center border rounded-lg py-3 cursor-pointer hover:border-blue-500">
-          <input type="radio" name="recurring" value="25" class="hidden peer">
-          <span class="peer-checked:text-blue-600 font-medium">$25/month</span>
-        </label>
-        <label class="flex items-center justify-center border rounded-lg py-3 cursor-pointer hover:border-blue-500">
-          <input type="radio" name="recurring" value="50" class="hidden peer">
-          <span class="peer-checked:text-blue-600 font-medium">$50/month</span>
-        </label>
-        <label class="flex items-center justify-center border rounded-lg py-3 cursor-pointer hover:border-blue-500">
-          <input type="radio" name="recurring" value="100" class="hidden peer">
-          <span class="peer-checked:text-blue-600 font-medium">$100/month</span>
-        </label>
-        <label class="flex items-center justify-center border rounded-lg py-3 cursor-pointer hover:border-blue-500">
-          <input type="radio" name="recurring" value="125" class="hidden peer">
-          <span class="peer-checked:text-blue-600 font-medium">$125/month</span>
-        </label>
+      <!-- Amount field mirroring the selection (optional display like screenshot) -->
+      <div class="flex items-center justify-center mb-6">
+        <div class="flex items-center border-2 rounded-lg overflow-hidden w-64">
+          <div class="px-3 py-2 bg-gray-100 text-gray-600">$</div>
+          <input id="amount-display" type="text" readonly
+                 class="px-3 py-2 w-full outline-none"
+                 value="30.00">
+        </div>
+      </div>
+
+      <hr class="my-6">
+
+      <!-- Frequency tabs -->
+      <h2 class="text-lg font-semibold mb-3 text-center">Make your gift recurring</h2>
+      <div class="flex justify-center gap-2 mb-6">
+        <button type="button" class="freq-btn px-4 py-2 border rounded-md bg-blue-600 text-white" data-frequency="one_time">One Time</button>
+        <button type="button" class="freq-btn px-4 py-2 border rounded-md hover:bg-gray-100" data-frequency="monthly">Monthly</button>
+        <button type="button" class="freq-btn px-4 py-2 border rounded-md hover:bg-gray-100" data-frequency="quarterly">Quarterly</button>
+        <button type="button" class="freq-btn px-4 py-2 border rounded-md hover:bg-gray-100" data-frequency="yearly">Yearly</button>
       </div>
 
       <!-- Form -->
       <form id="donation-form" method="POST" action="{% url 'create_checkout_session' %}" class="space-y-4">
         {% csrf_token %}
         <input type="hidden" id="final-amount" name="amount">
-        <input type="hidden" id="is-recurring" name="recurring">
+        <input type="hidden" id="donation-frequency" name="frequency">
         <input type="hidden" name="org" value="{{ org }}">
 
         <div class="grid grid-cols-2 gap-4">
@@ -97,18 +98,15 @@
         </div>
 
         <label class="flex items-start gap-2 text-sm text-gray-600">
-          <input type="checkbox" required class="mt-1"> 
+          <input type="checkbox" required class="mt-1">
           <span>I approve this donation to Solutions for Change in the amount set above.</span>
         </label>
 
         <!-- reCAPTCHA -->
-        <div class="g-recaptcha" data-sitekey="6LdKsswrAAAAABF6_tZ-zhifj6O4bAcNA7UbhpFH"></div>
+        <div class="g-recaptcha" data-sitekey="{{ RECAPTCHA_SITE_KEY|default:'YOUR_SITE_KEY' }}"></div>
 
         <button class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-3 rounded-lg font-semibold shadow-md flex items-center justify-center gap-2">
           <span>Donate Securely</span>
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.657-1.343-3-3-3S6 9.343 6 11v2a3 3 0 003 3h6a3 3 0 003-3v-2c0-1.657-1.343-3-3-3s-3 1.343-3 3z" />
-          </svg>
         </button>
       </form>
 
@@ -119,35 +117,42 @@
   </div>
 
   <script>
-    const buttons = document.querySelectorAll(".donation-btn");
-    const customAmount = document.getElementById("custom-amount");
-    const finalAmount = document.getElementById("final-amount");
-    const radios = document.querySelectorAll("input[name='recurring']");
-    const recurringHidden = document.getElementById("is-recurring");
+    const amountButtons = document.querySelectorAll(".donation-btn");
+    const customAmount  = document.getElementById("custom-amount");
+    const finalAmount   = document.getElementById("final-amount");
+    const amountDisplay = document.getElementById("amount-display");
+    const freqButtons   = document.querySelectorAll(".freq-btn");
+    const donationFreq  = document.getElementById("donation-frequency");
 
-    function clearRecurring() { recurringHidden.value = ""; radios.forEach(r => r.checked = false); }
-
-    buttons.forEach(btn => {
+    // Amount selection
+    amountButtons.forEach(btn => {
       btn.addEventListener("click", () => {
         finalAmount.value = btn.dataset.amount;
+        amountDisplay.value = Number(btn.dataset.amount).toFixed(2);
         customAmount.value = "";
-        clearRecurring();
-        buttons.forEach(b => b.classList.remove("bg-blue-600","text-white"));
+        amountButtons.forEach(b => b.classList.remove("bg-blue-600","text-white"));
         btn.classList.add("bg-blue-600","text-white");
       });
     });
 
     customAmount.addEventListener("input", () => {
       finalAmount.value = customAmount.value;
-      clearRecurring();
-      buttons.forEach(b => b.classList.remove("bg-blue-600","text-white"));
+      amountDisplay.value = (Number(customAmount.value || 0)).toFixed(2);
+      amountButtons.forEach(b => b.classList.remove("bg-blue-600","text-white"));
     });
 
-    radios.forEach(r => {
-      r.addEventListener("change", () => {
-        recurringHidden.value = r.value;
+    // Frequency selection
+    freqButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        donationFreq.value = btn.dataset.frequency;
+        freqButtons.forEach(b => b.classList.remove("bg-blue-600","text-white"));
+        btn.classList.add("bg-blue-600","text-white");
       });
     });
+
+    // Defaults: $30 One Time
+    document.querySelector(".donation-btn[data-amount='30']").click();
+    document.querySelector(".freq-btn[data-frequency='one_time']").click();
   </script>
 </body>
 </html>
