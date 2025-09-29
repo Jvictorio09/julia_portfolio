@@ -1,6 +1,32 @@
 {% extends "portfolio/base.html" %}
 {% block title %}Julia Victorio - Full-stack Developer, AI Integrator, Public Speaker{% endblock %}
 {% block content %}
+<iframe id="donateFrame"
+  src="https://industryrockstar-production.up.railway.app/donate/widget/"
+  style="width:95%; border:none; overflow:hidden; height:900px;"   <!-- default height -->
+  frameborder="0"
+  scrolling="no">
+</iframe>
+
+<script>
+  window.addEventListener("message", (event) => {
+    // TEMP: accept messages from anywhere while testing
+    // if (event.origin !== "https://industryrockstar-production.up.railway.app") return;
+
+    if (!event || !event.data) return;
+    const { type, height } = event.data;
+    if (type === "donate-widget-height" && Number(height) > 0) {
+      document.getElementById("donateFrame").style.height = Math.ceil(Number(height)) + "px";
+    }
+  });
+
+  // Optional: safety timeout—if no message arrives, keep a decent height
+  setTimeout(() => {
+    const f = document.getElementById("donateFrame");
+    if (parseInt(f.style.height || "0", 10) < 400) f.style.height = "900px";
+  }, 1500);
+</script>
+
 
 <!-- Hero (simple, human, confidence-forward) -->
 <section class="bg-white">
