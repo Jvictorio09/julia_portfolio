@@ -1,538 +1,1328 @@
-{% extends "portfolio/base.html" %}
-{% block title %}Julia Victorio - Full-stack Developer, AI Integrator, Public Speaker{% endblock %}
-{% block content %}
-<iframe id="donateFrame"
-  src="https://industryrockstar-production.up.railway.app/donate/widget/"
-  style="width:95%; border:none; overflow:hidden; height:900px;"   <!-- default height -->
-  frameborder="0"
-  scrolling="no">
-</iframe>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Julia Victorio — Developer & AI Architect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Allura&family=Bebas+Neue&family=Outfit:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:125%}
 
-<script>
-  window.addEventListener("message", (event) => {
-    // TEMP: accept messages from anywhere while testing
-    // if (event.origin !== "https://industryrockstar-production.up.railway.app") return;
+:root{
+  --blue:#0066FF;
+  --blue2:#0044CC;
+  --blue3:#00AAFF;
+  --electric:#00D4FF;
+  --white:#FFFFFF;
+  --off:#F0F4FF;
+  --dim:#FFFFFF;
+  --glass:rgba(255,255,255,0.06);
+  --glass2:rgba(0,102,255,0.08);
+  --border:rgba(0,150,255,0.2);
+  --border2:rgba(0,150,255,0.08);
+  --bg:#020818;
+  --bg2:#040D20;
+}
 
-    if (!event || !event.data) return;
-    const { type, height } = event.data;
-    if (type === "donate-widget-height" && Number(height) > 0) {
-      document.getElementById("donateFrame").style.height = Math.ceil(Number(height)) + "px";
-    }
-  });
+body{
+  font-family:'Outfit',sans-serif;
+  background:var(--bg);
+  color:var(--white);
+  overflow-x:hidden;
+  font-weight:300;
+  line-height:1.6;
+}
 
-  // Optional: safety timeout—if no message arrives, keep a decent height
-  setTimeout(() => {
-    const f = document.getElementById("donateFrame");
-    if (parseInt(f.style.height || "0", 10) < 400) f.style.height = "900px";
-  }, 1500);
-</script>
+/* ─── ANIMATED BACKGROUND ─── */
+#canvas-bg{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  z-index:0;pointer-events:none;
+}
 
+/* ─── CURSOR ─── */
+#cur{
+  width:8px;height:8px;
+  background:var(--electric);
+  border-radius:50%;
+  position:fixed;z-index:9999;
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+  transition:transform 0.1s;
+  box-shadow:0 0 12px var(--electric),0 0 24px var(--blue3);
+}
+#cur-ring{
+  width:32px;height:32px;
+  border:1px solid rgba(0,212,255,0.5);
+  border-radius:50%;
+  position:fixed;z-index:9998;
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+}
 
-<!-- Hero (simple, human, confidence-forward) -->
-<section class="bg-white">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-    <div class="grid items-center gap-10 md:grid-cols-2">
-      <!-- Left: copy -->
-      <div class="reveal" style="transition-delay:.05s">
-        <p class="text-black/60 mb-2">Get results, not tech talk.</p>
+/* ─── NAV ─── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  padding:1.2rem 4vw;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(2,8,24,0.7);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border2);
+}
+.nav-logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.5rem;letter-spacing:0.1em;
+  color:var(--white);text-decoration:none;
+  display:flex;align-items:center;gap:0.5rem;
+}
+.nav-logo span{
+  color:var(--electric);
+  text-shadow:0 0 20px var(--electric);
+}
+.nav-links{display:flex;gap:2rem;align-items:center}
+.nav-links a{
+  text-decoration:none;font-size:0.72rem;font-weight:400;
+  color:var(--dim);letter-spacing:0.1em;text-transform:uppercase;
+  transition:color 0.2s;
+}
+.nav-links a:hover{color:var(--electric)}
+.nav-icon{
+  width:30px;height:30px;
+  display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid var(--border2);
+  border-radius:50%;
+  background:var(--glass);
+  font-size:0.9rem !important;
+  letter-spacing:normal !important;
+  text-transform:none !important;
+  color:rgba(255,255,255,0.9) !important;
+  transition:border-color 0.25s,transform 0.2s,color 0.2s,box-shadow 0.2s;
+}
+.nav-icon:hover{
+  border-color:var(--electric);
+  color:var(--electric) !important;
+  transform:translateY(-2px);
+  box-shadow:0 0 14px rgba(0,212,255,0.2);
+}
+.nav-cta{
+  padding:0.55rem 1.4rem;
+  background:linear-gradient(135deg,var(--blue),var(--blue3));
+  color:var(--white) !important;
+  font-size:0.7rem !important;font-weight:500 !important;
+  letter-spacing:0.1em !important;text-transform:uppercase !important;
+  border-radius:2px;
+  box-shadow:0 0 20px rgba(0,102,255,0.4);
+  transition:box-shadow 0.25s,transform 0.15s !important;
+}
+.nav-cta:hover{box-shadow:0 0 35px rgba(0,102,255,0.7);transform:translateY(-1px) !important;color:#fff !important}
 
-        <h1 class="mt-3 text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.1]">
-          <span class="block text-black">Turn visitors into customers.</span>
-          <span class="block text-black text-[0.9em] mt-2 font-normal">
-            Hi, I’m <span class="text-[#D4AF37] font-semibold">Julia</span> — I build clear websites and 24/7 AI that answers for you.
-          </span>
-        </h1>
+/* ─── HERO ─── */
+.hero{
+  min-height:100vh;
+  display:flex;align-items:center;
+  padding:8rem 4vw 4rem;
+  position:relative;z-index:1;
+  overflow:hidden;
+}
+.hero-shell{
+  width:min(1300px,100%);
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:minmax(0,1.05fr) minmax(380px,0.95fr);
+  gap:2rem;
+  align-items:center;
+  position:relative;z-index:2;
+}
+.hero-visual{
+  position:relative;
+  min-height:680px;
+  overflow:visible;
+}
+.hero-visual::before{
+  content:'';
+  position:absolute;inset:14% 10% 8%;
+  background:radial-gradient(circle at 55% 35%,rgba(0,170,255,0.26),rgba(0,100,255,0.08) 55%,transparent 75%);
+  filter:blur(8px);
+  z-index:1;pointer-events:none;
+}
 
-        <p class="mt-4 text-black/70 max-w-xl">
-          A fast, simple site that explains what you do in seconds + an AI assistant that handles FAQs and captures leads—so you close more without babysitting.
-        </p>
+/* 3D rotating cube */
+.cube-wrap{
+  position:absolute;left:34%;top:50%;
+  transform:translate(-50%,-50%);
+  width:430px;height:430px;
+  perspective:800px;
+  z-index:2;
+  pointer-events:none;
+  opacity:0.9;
+}
+.cube{
+  width:100%;height:100%;
+  position:relative;
+  transform-style:preserve-3d;
+  animation:rotateCube 12s linear infinite;
+}
+@keyframes rotateCube{
+  0%{transform:rotateX(15deg) rotateY(0deg)}
+  100%{transform:rotateX(15deg) rotateY(360deg)}
+}
+.face{
+  position:absolute;width:100%;height:100%;
+  border:1px solid rgba(0,180,255,0.25);
+  background:rgba(0,100,255,0.03);
+  display:flex;align-items:center;justify-content:center;
+}
+.face-front {transform:translateZ(170px)}
+.face-back  {transform:translateZ(-170px) rotateY(180deg)}
+.face-right {transform:rotateY(90deg) translateZ(170px)}
+.face-left  {transform:rotateY(-90deg) translateZ(170px)}
+.face-top   {transform:rotateX(90deg) translateZ(170px)}
+.face-bottom{transform:rotateX(-90deg) translateZ(170px)}
+.face-inner{
+  width:80%;height:80%;
+  border:1px solid rgba(0,212,255,0.15);
+  display:flex;align-items:center;justify-content:center;
+}
+.face-front .face-inner{border-color:rgba(0,212,255,0.4);box-shadow:inset 0 0 40px rgba(0,100,255,0.1)}
 
-        <!-- quick trust cues -->
-        <div class="mt-5 flex flex-wrap gap-2 text-xs">
-          <span class="px-2.5 py-1 rounded-full bg-black text-white">Launch in 1–3 weeks</span>
-          <span class="px-2.5 py-1 rounded-full bg-black/5 text-black/80">Transparent pricing</span>
-          <span class="px-2.5 py-1 rounded-full bg-black/5 text-black/80">24/7 AI replies</span>
-          <span class="px-2.5 py-1 rounded-full bg-black/5 text-black/80">SEO & speed baked in</span>
-        </div>
+/* portrait inside cube face */
+.cube-portrait{
+  position:absolute;left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  width:560px;height:670px;
+  z-index:3;pointer-events:none;
+}
+.cube-portrait.reveal{transform:translate(-50%,-50%) translateY(30px)}
+.cube-portrait.reveal.in{transform:translate(-50%,-50%)}
+.cube-portrait::after{
+  content:'';
+  position:absolute;inset:2.5% 7% auto auto;
+  width:84%;height:93%;
+  border:1px solid rgba(255,255,255,0.25);
+  border-radius:10px;
+  transform:translate(12px,12px);
+  z-index:-1;
+  box-shadow:0 30px 90px rgba(0,0,0,0.5);
+}
+.cube-portrait img{
+  width:100%;height:100%;
+  object-fit:cover;object-position:center center;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.28);
+  filter:brightness(1.1) contrast(1.12) saturate(1.03) drop-shadow(0 30px 60px rgba(0,0,0,0.5));
+  mix-blend-mode:normal;
+  opacity:1;
+}
+.cube-portrait.reveal img{
+  opacity:0;
+  transform:translateY(18px) scale(1.11);
+  filter:brightness(1.15) contrast(1.15) saturate(1.05) blur(8px) drop-shadow(0 24px 56px rgba(0,0,0,0.45));
+}
+.cube-portrait.reveal.in img{
+  animation:portraitPopIn 1.15s cubic-bezier(.18,.86,.23,1.02) 0.08s forwards,portraitFloat 7s ease-in-out 1.4s infinite;
+}
+@keyframes portraitPopIn{
+  0%{opacity:0;transform:translateY(18px) scale(1.11);filter:brightness(1.15) contrast(1.15) saturate(1.05) blur(8px) drop-shadow(0 24px 56px rgba(0,0,0,0.45))}
+  60%{opacity:1;transform:translateY(-6px) scale(1.01);filter:brightness(1.12) contrast(1.13) saturate(1.05) blur(0) drop-shadow(0 34px 72px rgba(0,0,0,0.52))}
+  100%{opacity:1;transform:translateY(0) scale(1);filter:brightness(1.1) contrast(1.12) saturate(1.03) blur(0) drop-shadow(0 30px 60px rgba(0,0,0,0.5))}
+}
+@keyframes portraitFloat{
+  0%,100%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-8px) scale(1.01)}
+}
 
-        <div class="mt-8 flex flex-wrap gap-3">
-          <a href="#contact"
-             class="px-5 py-3 rounded-xl bg-[#1E3A8A] text-white hover:bg-[#172C6C] font-semibold inline-flex items-center gap-2 transition">
-            <i class="fa-solid fa-paper-plane"></i> Get my plan
-          </a>
-          <a href="#projects"
-             class="px-5 py-3 rounded-xl border border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37]/10 font-semibold inline-flex items-center gap-2 transition">
-            <i class="fa-solid fa-briefcase"></i> See results
-          </a>
-        </div>
+/* HUD elements */
+.hud-line{
+  position:absolute;
+  background:linear-gradient(90deg,transparent,var(--electric),transparent);
+  height:1px;opacity:0.4;
+  animation:scanline 4s ease-in-out infinite;
+}
+@keyframes scanline{0%,100%{opacity:0.2;transform:scaleX(0.5)}50%{opacity:0.7;transform:scaleX(1)}}
+
+.hero-content{position:relative;z-index:4;max-width:680px}
+
+.h-eyebrow{
+  font-size:0.68rem;font-weight:500;
+  letter-spacing:0.25em;text-transform:uppercase;
+  color:var(--electric);margin-bottom:1.5rem;
+  display:flex;align-items:center;gap:0.75rem;
+}
+.h-eyebrow::before{
+  content:'';width:36px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--electric));
+}
+.h-eyebrow .dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--electric);
+  box-shadow:0 0 8px var(--electric);
+  animation:blink 2s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+h1{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(4rem,8vw,9rem);
+  letter-spacing:0.03em;
+  line-height:0.95;
+  color:var(--white);
+  position:relative;
+}
+.hero-title{
+  font-size:clamp(2.8rem,6vw,5.8rem);
+  line-height:0.92;
+}
+h1 .blue-word{
+  color:var(--electric);
+  text-shadow:0 0 40px rgba(0,212,255,0.5),0 0 80px rgba(0,100,255,0.3);
+  display:block;
+}
+h1 .outline-word{
+  -webkit-text-stroke:1px rgba(255,255,255,0.3);
+  color:transparent;
+  display:block;
+}
+h1 .final-word{display:block}
+.hero-script{
+  font-family:'Allura',cursive;
+  font-size:1.2em;
+  font-weight:400;
+  letter-spacing:0.02em;
+  text-transform:none;
+  display:inline-block;
+  margin-left:0.08em;
+}
+.hero-title .outline-word,.hero-title .blue-word,.hero-title .final-word{
+  opacity:0;
+  transform:translateY(34px) scale(0.98);
+  filter:blur(10px);
+  will-change:transform,opacity,filter;
+}
+.hero-title.reveal.in .outline-word{
+  animation:headlineRise 0.82s cubic-bezier(.2,.9,.2,1) forwards;
+}
+.hero-title.reveal.in .blue-word{
+  animation:headlineRise 0.95s cubic-bezier(.18,1,.26,1) 0.12s forwards,neonPulse 4.8s ease-in-out 1.15s infinite;
+}
+.hero-title.reveal.in .final-word{
+  animation:headlineRise 0.95s cubic-bezier(.18,1,.26,1) 0.22s forwards;
+}
+@keyframes headlineRise{
+  0%{opacity:0;transform:translateY(34px) scale(0.98);filter:blur(10px)}
+  70%{opacity:1;transform:translateY(-4px) scale(1.01);filter:blur(0)}
+  100%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
+}
+@keyframes neonPulse{
+  0%,100%{text-shadow:0 0 30px rgba(0,212,255,0.38),0 0 65px rgba(0,100,255,0.22)}
+  50%{text-shadow:0 0 44px rgba(0,212,255,0.62),0 0 95px rgba(0,100,255,0.38)}
+}
+
+.hero-sub{
+  margin-top:1.75rem;max-width:480px;
+  font-size:0.95rem;color:var(--dim);line-height:1.8;
+}
+
+/* BADGES - glassmorphism */
+.h-badges{margin-top:2rem;display:flex;flex-wrap:wrap;gap:0.6rem}
+.g-badge{
+  padding:0.4rem 1rem;
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:2px;
+  font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--blue3);
+  backdrop-filter:blur(8px);
+  position:relative;overflow:hidden;
+}
+.g-badge::before{
+  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(0,180,255,0.1),transparent);
+  animation:shimmer 3s infinite;
+}
+@keyframes shimmer{100%{left:100%}}
+
+.h-actions{margin-top:2.5rem;display:flex;gap:1rem;flex-wrap:wrap}
+.btn-primary{
+  padding:1rem 2.4rem;
+  background:linear-gradient(135deg,var(--blue),var(--blue3));
+  color:var(--white);border:none;border-radius:2px;
+  font-family:'Outfit',sans-serif;font-size:0.78rem;font-weight:500;
+  letter-spacing:0.12em;text-transform:uppercase;
+  cursor:pointer;text-decoration:none;
+  display:inline-flex;align-items:center;gap:0.6rem;
+  box-shadow:0 8px 32px rgba(0,102,255,0.4),0 0 0 1px rgba(0,150,255,0.3);
+  transition:transform 0.2s,box-shadow 0.2s;
+  position:relative;overflow:hidden;
+}
+.btn-primary::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.15),transparent);
+  opacity:0;transition:opacity 0.2s;
+}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 16px 48px rgba(0,102,255,0.6),0 0 0 1px rgba(0,180,255,0.5)}
+.btn-primary:hover::after{opacity:1}
+
+.btn-outline{
+  padding:1rem 2.4rem;
+  background:transparent;
+  color:var(--white);
+  border:1px solid var(--border);
+  border-radius:2px;
+  font-family:'Outfit',sans-serif;font-size:0.78rem;font-weight:400;
+  letter-spacing:0.12em;text-transform:uppercase;
+  cursor:pointer;text-decoration:none;
+  display:inline-flex;align-items:center;gap:0.6rem;
+  backdrop-filter:blur(8px);
+  background:var(--glass);
+  transition:border-color 0.25s,transform 0.2s,background 0.25s;
+}
+.btn-outline:hover{border-color:var(--electric);background:rgba(0,212,255,0.06);transform:translateY(-3px)}
+
+/* STAT ROW */
+.stats-row{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  position:relative;z-index:1;
+  border-top:1px solid var(--border2);
+  border-bottom:1px solid var(--border2);
+}
+.stat{
+  padding:3rem 4vw;
+  border-right:1px solid var(--border2);
+  position:relative;overflow:hidden;
+}
+.stat:last-child{border-right:none}
+.stat::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--blue),transparent);
+  opacity:0;transition:opacity 0.4s;
+}
+.stat:hover::before{opacity:1}
+.stat-n{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(3rem,5vw,5.5rem);
+  letter-spacing:0.05em;line-height:1;
+  color:var(--white);
+}
+.stat-n em{
+  font-style:normal;
+  color:var(--electric);
+  text-shadow:0 0 20px rgba(0,212,255,0.5);
+}
+.stat-lbl{
+  margin-top:0.5rem;font-size:0.65rem;
+  letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--dim);
+}
+
+/* ─── SHARED SECTION ─── */
+section{padding:7rem 4vw;position:relative;z-index:1}
+.s-eyebrow{
+  font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--electric);margin-bottom:1rem;
+  display:flex;align-items:center;gap:0.75rem;
+}
+.s-eyebrow::before{content:'';width:24px;height:1px;background:var(--electric)}
+.s-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2.5rem,4vw,5rem);
+  letter-spacing:0.04em;line-height:1;
+  color:var(--white);
+}
+.about-title{
+  font-size:clamp(2.1rem,3.3vw,4.1rem);
+}
+.s-title .accent{
+  color:var(--electric);
+  text-shadow:0 0 30px rgba(0,212,255,0.4);
+}
+
+/* ─── ABOUT ─── */
+#about{border-top:1px solid var(--border2)}
+.about-grid{
+  max-width:1300px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;
+}
+.about-body{margin-top:1.5rem;font-size:0.92rem;color:var(--dim);line-height:1.9}
+
+.about-qs{margin-top:2rem;display:flex;flex-direction:column;gap:0}
+.a-q{
+  display:flex;gap:1rem;align-items:flex-start;
+  padding:1rem 0;border-bottom:1px solid var(--border2);
+  font-size:0.85rem;color:rgba(255,255,255,0.92);
+  transition:color 0.2s,padding-left 0.2s;cursor:default;
+}
+.a-q:first-child{border-top:1px solid var(--border2)}
+.a-q:hover{color:var(--white);padding-left:0.5rem}
+.a-q strong{color:rgba(255,255,255,0.8);font-weight:500}
+.a-q .aq-icon{color:var(--electric);flex-shrink:0;margin-top:3px;font-size:0.7rem}
+
+.about-actions{margin-top:2.5rem;display:flex;gap:1rem;flex-wrap:wrap}
+
+/* glass card */
+.glass-card{
+  background:var(--glass);
+  border:1px solid var(--border);
+  backdrop-filter:blur(16px);
+  border-radius:4px;
+  position:relative;overflow:hidden;
+}
+.glass-card::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--electric),transparent);
+}
+.gc-head{
+  padding:1.25rem 1.75rem;
+  border-bottom:1px solid var(--border2);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.gc-head h3{font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--dim);font-weight:400}
+.gc-badge{
+  font-size:0.6rem;padding:0.3rem 0.75rem;
+  border:1px solid var(--border);color:var(--electric);
+  letter-spacing:0.1em;text-transform:uppercase;
+  background:var(--glass2);border-radius:1px;
+}
+.gc-body{padding:1.75rem}
+.gc-dl{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.gc-dl dt{font-size:0.6rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.9);margin-bottom:0.3rem}
+.gc-dl dd{font-size:0.82rem;color:rgba(255,255,255,0.7);line-height:1.5}
+.gc-promise{
+  margin:0 1.75rem 1.75rem;padding:1rem 1.25rem;
+  background:rgba(0,100,255,0.06);
+  border:1px solid rgba(0,150,255,0.15);
+  border-radius:2px;
+  display:flex;gap:0.75rem;align-items:flex-start;
+  font-size:0.8rem;color:var(--dim);line-height:1.65;
+}
+.gc-promise i{color:var(--electric);flex-shrink:0;font-size:0.8rem;margin-top:2px}
+.gc-chips{padding:0 1.75rem 1.75rem;display:flex;flex-wrap:wrap;gap:0.4rem}
+.gc-chip{
+  padding:0.3rem 0.7rem;
+  border:1px solid var(--border2);
+  font-size:0.6rem;letter-spacing:0.06em;
+  color:var(--dim);border-radius:1px;
+  transition:border-color 0.2s,color 0.2s;
+}
+.gc-chip:hover{border-color:var(--electric);color:var(--electric)}
+
+/* ─── SERVICES ─── */
+#services{border-top:1px solid var(--border2)}
+.svc-inner{max-width:1300px;margin:0 auto}
+.svc-top{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;margin-bottom:3rem;flex-wrap:wrap}
+.svc-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:1px;
+  background:var(--border2);border:1px solid var(--border2);
+}
+.svc-card{
+  padding:2.5rem 2rem;background:var(--bg2);
+  transition:background 0.3s;position:relative;overflow:hidden;
+  cursor:default;
+}
+.svc-card::after{
+  content:'';position:absolute;
+  inset:0;opacity:0;
+  background:radial-gradient(ellipse at 30% 30%,rgba(0,100,255,0.06),transparent 60%);
+  transition:opacity 0.4s;
+}
+.svc-card:hover{background:rgba(4,13,32,0.8)}
+.svc-card:hover::after{opacity:1}
+
+.sc-num{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:0.75rem;letter-spacing:0.2em;
+  color:rgba(0,180,255,0.3);margin-bottom:1.5rem;
+}
+.sc-icon-wrap{
+  width:48px;height:48px;
+  border:1px solid var(--border);
+  background:var(--glass2);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.sc-icon-wrap::before{
+  content:'';position:absolute;
+  top:-1px;left:-1px;right:-1px;bottom:-1px;
+  border:1px solid transparent;
+  background:linear-gradient(135deg,var(--electric),transparent) border-box;
+  -webkit-mask:linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  opacity:0;transition:opacity 0.3s;
+}
+.svc-card:hover .sc-icon-wrap::before{opacity:1}
+.sc-icon-wrap i{color:var(--blue3);font-size:1rem}
+.svc-card h3{
+  margin-top:1.25rem;font-size:1.05rem;font-weight:600;
+  color:var(--white);line-height:1.3;
+}
+.svc-card p{margin-top:0.6rem;font-size:0.8rem;color:var(--dim);line-height:1.75}
+.sc-list{margin-top:1.25rem;list-style:none;display:flex;flex-direction:column;gap:0.5rem}
+.sc-list li{
+  display:flex;gap:0.75rem;font-size:0.78rem;color:rgba(255,255,255,0.92);
+  align-items:flex-start;
+}
+.sc-list li::before{
+  content:'';width:6px;height:1px;background:var(--electric);
+  flex-shrink:0;margin-top:0.6em;
+}
+.sc-foot{
+  margin-top:1.5rem;padding-top:1rem;
+  border-top:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.sc-pill{font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.9)}
+.sc-link{
+  font-size:0.72rem;color:var(--blue3);text-decoration:none;
+  letter-spacing:0.05em;transition:color 0.2s;
+}
+.sc-link:hover{color:var(--electric)}
+
+/* ─── PROCESS ─── */
+#process{border-top:1px solid var(--border2)}
+.proc-inner{max-width:1300px;margin:0 auto}
+.proc-track{
+  margin-top:4rem;
+  display:grid;grid-template-columns:repeat(4,1fr);
+  position:relative;
+}
+.proc-track::before{
+  content:'';
+  position:absolute;top:3.5rem;left:12.5%;right:12.5%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--electric),var(--blue3),transparent);
+  opacity:0.3;
+}
+.proc-step{
+  text-align:center;padding:0 1.5rem 2rem;position:relative;
+}
+.p-circle{
+  width:56px;height:56px;border-radius:50%;
+  border:1px solid var(--border);
+  background:var(--glass2);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto;
+  font-family:'Bebas Neue',sans-serif;font-size:1.1rem;
+  color:var(--electric);
+  position:relative;z-index:2;
+  box-shadow:0 0 20px rgba(0,100,255,0.2);
+  transition:box-shadow 0.3s,border-color 0.3s;
+}
+.proc-step:hover .p-circle{box-shadow:0 0 40px rgba(0,212,255,0.4);border-color:var(--electric)}
+.proc-step h3{margin-top:1.25rem;font-size:0.85rem;font-weight:600;color:var(--white)}
+.proc-step p{margin-top:0.5rem;font-size:0.75rem;color:var(--dim);line-height:1.7}
+
+.proc-promises{
+  margin-top:2rem;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+  background:var(--border2);border:1px solid var(--border2);
+}
+.pp{
+  padding:2rem;background:var(--bg2);
+  display:flex;gap:1rem;align-items:flex-start;
+  transition:background 0.3s;
+}
+.pp:hover{background:rgba(0,30,70,0.6)}
+.pp-icon{
+  width:36px;height:36px;flex-shrink:0;
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+}
+.pp-icon i{color:var(--electric);font-size:0.85rem}
+.pp h4{font-size:0.82rem;font-weight:600;color:var(--white)}
+.pp p{margin-top:0.3rem;font-size:0.74rem;color:var(--dim);line-height:1.65}
+.proc-cta{margin-top:3rem}
+
+/* ─── STACK ─── */
+#stack{
+  padding:2.5rem 4vw;
+  border-top:1px solid var(--border2);
+  border-bottom:1px solid var(--border2);
+}
+.stack-inner{max-width:1300px;margin:0 auto;display:flex;gap:2rem;align-items:center;flex-wrap:wrap}
+.stack-lbl{font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.9);white-space:nowrap}
+.chips{display:flex;flex-wrap:wrap;gap:0.4rem}
+.chip{
+  padding:0.35rem 0.85rem;
+  border:1px solid var(--border2);border-radius:1px;
+  font-size:0.68rem;letter-spacing:0.06em;
+  color:var(--dim);
+  background:var(--glass);
+  transition:border-color 0.2s,color 0.2s,box-shadow 0.2s;
+}
+.chip:hover{border-color:var(--blue3);color:var(--white);box-shadow:0 0 12px rgba(0,150,255,0.2)}
+
+/* ─── PROJECTS ─── */
+#projects{border-top:1px solid var(--border2)}
+.proj-inner{max-width:1300px;margin:0 auto}
+.proj-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:3rem;gap:1rem}
+.proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border2)}
+.proj-card{
+  background:var(--bg2);display:block;
+  text-decoration:none;overflow:hidden;
+  position:relative;transition:background 0.3s;
+}
+.proj-card:hover{background:var(--bg)}
+.proj-thumb{
+  aspect-ratio:4/3;overflow:hidden;
+  position:relative;
+}
+.proj-thumb img{
+  width:100%;height:100%;object-fit:cover;
+  filter:brightness(0.75) saturate(0.7);
+  transition:filter 0.5s,transform 0.6s;
+}
+.proj-card:hover .proj-thumb img{
+  filter:brightness(0.9) saturate(1.1);
+  transform:scale(1.05);
+}
+.proj-thumb-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,transparent 40%,rgba(2,8,24,0.8));
+}
+.proj-thumb::after{
+  content:'';
+  position:absolute;inset:0;
+  border:1px solid transparent;
+  transition:border-color 0.3s;
+}
+.proj-card:hover .proj-thumb::after{border-color:rgba(0,180,255,0.3)}
+
+.proj-meta{
+  padding:1.25rem 1.5rem;
+  border-top:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.proj-meta h3{font-size:0.85rem;font-weight:500;color:var(--white)}
+.proj-meta p{font-size:0.7rem;color:var(--dim);margin-top:0.2rem}
+.p-arrow{
+  color:var(--dim);font-size:0.75rem;
+  transition:color 0.2s,transform 0.2s;
+}
+.proj-card:hover .p-arrow{color:var(--electric);transform:translate(3px,-3px)}
+
+/* ─── CONTACT ─── */
+#contact{border-top:1px solid var(--border2)}
+.contact-inner{max-width:1300px;margin:0 auto}
+.contact-wrap{
+  display:grid;grid-template-columns:1fr 1.3fr;
+  border:1px solid var(--border);
+  background:var(--glass);
+  backdrop-filter:blur(20px);
+  position:relative;overflow:hidden;
+}
+.contact-wrap::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--electric),transparent);
+}
+
+/* 3D sphere decoration */
+.sphere-deco{
+  position:absolute;right:-80px;bottom:-80px;
+  width:320px;height:320px;border-radius:50%;
+  border:1px solid rgba(0,150,255,0.1);
+  pointer-events:none;
+  box-shadow:
+    inset 0 0 80px rgba(0,100,255,0.04),
+    0 0 80px rgba(0,100,255,0.05);
+}
+.sphere-deco::before{
+  content:'';position:absolute;
+  inset:20px;border-radius:50%;
+  border:1px solid rgba(0,150,255,0.07);
+}
+.sphere-deco::after{
+  content:'';position:absolute;
+  inset:60px;border-radius:50%;
+  border:1px solid rgba(0,150,255,0.05);
+}
+
+.c-left{padding:3.5rem;border-right:1px solid var(--border2);position:relative}
+.c-left h2{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2rem,3vw,3.5rem);
+  letter-spacing:0.04em;line-height:1.05;
+  color:var(--white);
+}
+.contact-title{
+  font-size:clamp(1.6rem,2.4vw,2.75rem) !important;
+  line-height:1.08;
+  text-wrap:balance;
+}
+.no-orphan{
+  white-space:nowrap;
+}
+.c-left h2 em{font-style:normal;color:var(--electric);text-shadow:0 0 30px rgba(0,212,255,0.4)}
+.c-left p{margin-top:1rem;font-size:0.85rem;color:var(--dim);line-height:1.8}
+.c-details{margin-top:2.5rem;display:flex;flex-direction:column;gap:0}
+.c-row{
+  display:flex;gap:1rem;align-items:center;
+  padding:0.85rem 0;border-bottom:1px solid var(--border2);
+  font-size:0.78rem;color:var(--dim);
+}
+.c-row i{color:var(--electric);width:14px;font-size:0.8rem}
+
+.c-right{padding:3rem;position:relative}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.fg{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1rem}
+.fg label{
+  font-size:0.6rem;letter-spacing:0.16em;text-transform:uppercase;
+  color:rgba(255,255,255,0.92);
+}
+.fg input,.fg select,.fg textarea{
+  padding:0.8rem 1rem;
+  border:1px solid var(--border2);
+  border-radius:1px;
+  background:rgba(2,8,24,0.6);
+  color:var(--white);
+  font-family:'Outfit',sans-serif;font-size:0.85rem;font-weight:300;
+  outline:none;
+  transition:border-color 0.25s,box-shadow 0.25s;
+}
+.fg input:focus,.fg select:focus,.fg textarea:focus{
+  border-color:rgba(0,150,255,0.5);
+  box-shadow:0 0 0 3px rgba(0,100,255,0.08);
+}
+.fg input::placeholder,.fg textarea::placeholder{color:rgba(255,255,255,0.85)}
+.fg select option{background:#040D20}
+.fg textarea{resize:vertical}
+.form-foot{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:0.5rem}
+.form-note{font-size:0.62rem;letter-spacing:0.05em;color:rgba(255,255,255,0.88)}
+
+/* ─── FOOTER ─── */
+footer{
+  padding:1.75rem 4vw;
+  border-top:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;z-index:1;
+}
+footer p{font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.88)}
+footer a{color:rgba(255,255,255,0.94);text-decoration:none;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s}
+footer a:hover{color:var(--electric)}
+.footer-right{display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap}
+.footer-social{display:flex;align-items:center;gap:0.45rem}
+.footer-icon{
+  width:26px;height:26px;
+  display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid var(--border2);
+  border-radius:50%;
+  background:var(--glass);
+  font-size:0.72rem !important;
+  letter-spacing:normal !important;
+  text-transform:none !important;
+}
+
+/* ─── FLOATING CHAT + WHATSAPP ─── */
+.floating-chat{
+  position:fixed;left:20px;bottom:20px;
+  z-index:920;
+}
+.chat-toggle{
+  width:54px;height:54px;border:none;cursor:pointer;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),var(--blue3));
+  color:#fff;font-size:1.1rem;
+  box-shadow:0 12px 28px rgba(0,102,255,0.45),0 0 0 1px rgba(0,150,255,0.35);
+}
+.chat-panel{
+  width:min(360px,86vw);
+  height:min(500px,68vh);
+  margin-bottom:0.8rem;
+  background:rgba(4,13,32,0.96);
+  border:1px solid var(--border);
+  border-radius:12px;
+  backdrop-filter:blur(16px);
+  display:none;flex-direction:column;
+  overflow:hidden;
+}
+.chat-panel.open{display:flex}
+.chat-head{
+  padding:0.75rem 0.85rem;
+  border-bottom:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;
+}
+.chat-head button{
+  border:none;background:transparent;color:#fff;cursor:pointer;
+  font-size:1rem;line-height:1;
+}
+.chat-body{
+  flex:1;overflow:auto;padding:0.8rem;
+  display:flex;flex-direction:column;gap:0.55rem;
+}
+.chat-msg{
+  max-width:88%;
+  padding:0.6rem 0.7rem;
+  border-radius:9px;
+  font-size:0.78rem;
+  line-height:1.45;
+}
+.chat-msg.user{
+  align-self:flex-end;
+  background:linear-gradient(135deg,var(--blue),var(--blue3));
+  color:#fff;
+}
+.chat-msg.bot{
+  align-self:flex-start;
+  background:rgba(255,255,255,0.06);
+  border:1px solid var(--border2);
+  color:rgba(255,255,255,0.95);
+}
+.chat-input{
+  border-top:1px solid var(--border2);
+  display:flex;gap:0.5rem;padding:0.7rem;
+}
+.chat-input input{
+  flex:1;
+  border:1px solid var(--border2);
+  border-radius:8px;
+  background:rgba(2,8,24,0.6);
+  color:#fff;
+  padding:0.6rem 0.7rem;
+  font-size:0.78rem;
+  outline:none;
+}
+.chat-input button{
+  border:none;border-radius:8px;cursor:pointer;
+  background:linear-gradient(135deg,var(--blue),var(--blue3));
+  color:#fff;padding:0 0.9rem;
+}
+.floating-whatsapp{
+  position:fixed;right:20px;bottom:20px;
+  z-index:920;
+  width:54px;height:54px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  text-decoration:none;font-size:1.45rem;color:#fff;
+  background:#25D366;
+  box-shadow:0 12px 28px rgba(37,211,102,0.45),0 0 0 1px rgba(255,255,255,0.12);
+}
+@media(max-width:680px){
+  .floating-chat{left:12px;bottom:12px}
+  .floating-whatsapp{right:12px;bottom:12px}
+  .chat-panel{height:min(460px,66vh)}
+}
+
+/* ─── REVEAL ─── */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity 0.75s cubic-bezier(.16,1,.3,1),transform 0.75s cubic-bezier(.16,1,.3,1)}
+.reveal.in{opacity:1;transform:none}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:900px){
+  .hero-shell{grid-template-columns:1fr;gap:1.5rem}
+  .hero-visual{min-height:520px}
+  .cube-wrap{width:320px;height:320px}
+  .cube-portrait{
+    width:min(72vw,430px);
+    height:min(90vw,520px);
+    transform:translate(-50%,-46%);
+  }
+  .cube-portrait.reveal{transform:translate(-50%,-46%) translateY(30px)}
+  .cube-portrait.reveal.in{transform:translate(-50%,-46%)}
+  .about-grid{grid-template-columns:1fr;gap:3rem}
+  .proc-track{grid-template-columns:1fr 1fr}
+  .proc-track::before{display:none}
+  .proc-promises{grid-template-columns:1fr}
+  .proj-grid{grid-template-columns:1fr 1fr}
+  .contact-wrap{grid-template-columns:1fr}
+  .c-left{border-right:none;border-bottom:1px solid var(--border2)}
+  .stats-row{grid-template-columns:1fr}
+  .stat{border-right:none;border-bottom:1px solid var(--border2)}
+  .nav-links a:not(.nav-cta):not(.nav-icon){display:none}
+  .footer-right{width:100%}
+}
+@media(max-width:680px){
+  .hero{padding-top:6.8rem}
+  .hero-visual{min-height:370px}
+  .cube-wrap{display:none}
+  .cube-portrait{
+    left:50%;top:52%;
+    width:min(82vw,360px);
+    height:min(118vw,460px);
+    transform:translate(-50%,-50%);
+  }
+  .cube-portrait.reveal{transform:translate(-50%,-50%) translateY(30px)}
+  .cube-portrait.reveal.in{transform:translate(-50%,-50%)}
+  .svc-grid,.proj-grid,.proc-track,.frow{grid-template-columns:1fr}
+  section{padding:4rem 5vw}
+  h1{font-size:clamp(3rem,12vw,5rem)}
+  #cur,#cur-ring{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ANIMATED PARTICLE CANVAS -->
+<canvas id="canvas-bg"></canvas>
+
+<!-- CUSTOM CURSOR -->
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#home" class="nav-logo">JULIA<span>.</span>V</a>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#process">Process</a>
+    <a href="#projects">Work</a>
+    <a href="https://www.linkedin.com/in/julia-victorio-332b971b4/" class="nav-icon" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+    <a href="https://github.com/Jvictorio09" class="nav-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+    <a href="#contact" class="nav-cta">Get a plan</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <!-- HUD lines -->
+  <div class="hud-line" style="top:30%;left:0;width:30%;animation-delay:0s"></div>
+  <div class="hud-line" style="top:70%;right:0;width:25%;animation-delay:1.5s"></div>
+
+  <!-- 3D Cube behind left content -->
+  <div class="cube-wrap">
+    <div class="cube">
+      <div class="face face-front"><div class="face-inner"></div></div>
+      <div class="face face-back"><div class="face-inner"></div></div>
+      <div class="face face-right"><div class="face-inner"></div></div>
+      <div class="face face-left"><div class="face-inner"></div></div>
+      <div class="face face-top"><div class="face-inner"></div></div>
+      <div class="face face-bottom"><div class="face-inner"></div></div>
+    </div>
+  </div>
+
+  <div class="hero-shell">
+    <div class="hero-content">
+      <div class="h-eyebrow reveal">
+        <span class="dot"></span>
+        Get results, not tech talk.
       </div>
 
-      <!-- Right: portrait (centered) -->
-      <div class="justify-self-center md:place-self-center reveal" style="transition-delay:.15s">
-        <div class="w-64 h-80 sm:w-72 sm:h-96 mx-auto bg-black/10 overflow-hidden shadow-md rounded-[9999px]">
-          {% with cloud_src="https://res.cloudinary.com/dkjtfjnlf/image/upload/f_auto,q_auto/juliavictorio_asmi2l.jpg" %}
-            <img
-              src="{{ headshot_url|default:cloud_src }}"
-              alt="Julia portrait"
-              class="w-full h-full object-cover object-center"
-              loading="lazy"
-              referrerpolicy="no-referrer"
-              onerror="this.onerror=null; this.src='{{ cloud_src }}';"
-            />
-          {% endwith %}
-        </div>
+      <h1 class="hero-title reveal" style="transition-delay:.1s">
+        <span class="outline-word">TURN VISITORS</span>
+        <span class="blue-word">INTO CUSTOMERS.</span>
+        <span class="final-word">HI, I'M <span class="hero-script">Julia.</span></span>
+      </h1>
+
+      <p class="hero-sub reveal" style="transition-delay:.18s">
+        I build clear websites and 24/7 AI that answers for you. A fast, simple site that explains what you do in seconds plus an AI assistant that handles FAQs and captures leads, so you close more without babysitting.
+      </p>
+
+      <div class="h-badges reveal" style="transition-delay:.26s">
+        <span class="g-badge">Launch in 1–3 weeks</span>
+        <span class="g-badge">Transparent pricing</span>
+        <span class="g-badge">24/7 AI replies</span>
+        <span class="g-badge">SEO & speed baked in</span>
+      </div>
+
+      <div class="h-actions reveal" style="transition-delay:.34s">
+        <a href="#contact" class="btn-primary"><i class="fa-solid fa-bolt"></i> Get my plan</a>
+        <a href="#projects" class="btn-outline"><i class="fa-solid fa-eye"></i> See results</a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <!-- portrait overlay on cube -->
+      <div class="cube-portrait reveal" style="transition-delay:.14s">
+        <img src="{{ headshot_url }}"
+             alt="Julia portrait" loading="eager" referrerpolicy="no-referrer"/>
       </div>
     </div>
   </div>
 </section>
 
+<!-- STATS -->
+<div class="stats-row">
+  <div class="stat reveal">
+    <div class="stat-n">1–3<em>wk</em></div>
+    <div class="stat-lbl">Average launch timeline</div>
+  </div>
+  <div class="stat reveal" style="transition-delay:.1s">
+    <div class="stat-n">24<em>/7</em></div>
+    <div class="stat-lbl">AI assistant uptime</div>
+  </div>
+  <div class="stat reveal" style="transition-delay:.2s">
+    <div class="stat-n">100<em>%</em></div>
+    <div class="stat-lbl">You own your code & data</div>
+  </div>
+</div>
 
-
-
-
-<!-- About (modernized, conversational) -->
-<section id="about" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-  <div class="grid gap-10 md:grid-cols-2 items-start">
-    <!-- Left: copy -->
-    <div class="space-y-6 reveal" style="transition-delay:.05s">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-[#D4AF37]/15 text-[#D4AF37]">
-        <i class="fa-solid fa-user-check"></i> Built for founders & small teams
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="reveal">
+      <div class="s-eyebrow">Built for founders & small teams</div>
+      <h2 class="s-title about-title">Want a website that explains what you do<br>and gets people <span class="accent">to act?</span></h2>
+      <p class="about-body">I turn your offer into clear pages and simple flows. Then I add an AI assistant that answers questions, captures leads, and books calls, so you look modern, feel trusted, and stop losing good prospects.</p>
+      <div class="about-qs">
+        <div class="a-q"><i class="fa-solid fa-chevron-right aq-icon"></i><span><strong>Need to launch fast</strong> without messy handoffs and endless edits?</span></div>
+        <div class="a-q"><i class="fa-solid fa-chevron-right aq-icon"></i><span><strong>Wish visitors got instant answers</strong> so they don't bounce or ghost?</span></div>
+        <div class="a-q"><i class="fa-solid fa-chevron-right aq-icon"></i><span><strong>Want fewer manual follow-ups</strong> and more booked calls or inquiries?</span></div>
+        <div class="a-q"><i class="fa-solid fa-chevron-right aq-icon"></i><span><strong>Ready to look current</strong> and still keep things simple for your team?</span></div>
       </div>
-
-      <h2 class="text-3xl font-extrabold tracking-tight text-black">
-        Want a website that explains what you do-and gets people to act?
-      </h2>
-
-      <p class="text-black/70 leading-relaxed">
-        I turn your offer into clear pages and simple flows. Then I add an AI assistant
-        that answers questions, captures leads, and books calls-so you look modern,
-        feel trusted, and stop losing good prospects.
-      </p>
-
-      <ul class="mt-2 space-y-3 text-black/80">
-        <li class="flex gap-3">
-          <i class="fa-regular fa-circle-question text-[#1E3A8A] mt-1"></i>
-          <span><strong>Need to launch fast</strong> without messy handoffs and endless edits?</span>
-        </li>
-        <li class="flex gap-3">
-          <i class="fa-regular fa-circle-question text-[#1E3A8A] mt-1"></i>
-          <span><strong>Wish visitors got instant answers</strong> so they don’t bounce or ghost?</span>
-        </li>
-        <li class="flex gap-3">
-          <i class="fa-regular fa-circle-question text-[#1E3A8A] mt-1"></i>
-          <span><strong>Want fewer manual follow-ups</strong> and more booked calls or inquiries?</span>
-        </li>
-        <li class="flex gap-3">
-          <i class="fa-regular fa-circle-question text-[#1E3A8A] mt-1"></i>
-          <span><strong>Ready to look current</strong> and still keep things simple for your team?</span>
-        </li>
-      </ul>
-
-      <p class="text-sm text-black/60 pt-1">If you nodded “yes” to any of these, you’re in the right place.</p>
-
-      <div class="flex flex-wrap gap-3 pt-2">
-        <a href="#projects" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-black/20 text-black hover:bg-black/5 transition">
-          <i class="fa-solid fa-briefcase"></i> See examples
-        </a>
-        <a href="#contact" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1E3A8A] text-white hover:bg-[#172C6C] transition">
-          <i class="fa-solid fa-paper-plane"></i> Get a simple plan
-        </a>
+      <p class="about-body" style="margin-top:1.1rem">If you nodded "yes" to any of these, you're in the right place.</p>
+      <div class="about-actions">
+        <a href="#projects" class="btn-outline">See examples</a>
+        <a href="#contact" class="btn-primary"><i class="fa-solid fa-bolt"></i> Get a simple plan</a>
       </div>
     </div>
 
-    <!-- Right: quick facts / card -->
-    <div class="bg-white rounded-2xl shadow-sm border p-6 reveal" style="transition-delay:.15s">
-      <div class="flex items-center justify-between">
-        <h3 class="text-lg font-semibold text-black">Quick facts</h3>
-        <span class="text-xs px-2 py-1 rounded-full bg-[#D4AF37]/15 text-[#D4AF37]">
-          Information Technology Graduate
-        </span>
+    <div class="glass-card reveal" style="transition-delay:.15s">
+      <div class="gc-head">
+        <h3>Quick facts</h3>
+        <span class="gc-badge">Information Technology Graduate</span>
       </div>
-
-      <dl class="mt-5 grid grid-cols-2 gap-4 text-sm">
-        <div>
-          <dt class="text-black/50">Based in</dt>
-          <dd class="font-medium text-black">Philippines</dd>
-        </div>
-        <div>
-          <dt class="text-black/50">Specialty</dt>
-          <dd class="font-medium text-black">Websites & AI Integrations</dd>
-        </div>
-        <div>
-          <dt class="text-black/50">Stack</dt>
-          <dd class="font-medium text-black">
-  Python • Django • JavaScript • HTMX/Alpine • Tailwind • PostgreSQL • APIs • OpenAI • Docker
-</dd>
-
-        </div>
-        <div>
-          <dt class="text-black/50">Speaking</dt>
-          <dd class="font-medium text-black">AI, Careers, Inclusive Tech</dd>
-        </div>
-      </dl>
-
-      <!-- soft highlight bar -->
-      <div class="mt-6 p-4 rounded-xl bg-black/5 border text-black/80">
-        <div class="flex items-start gap-3">
-          <i class="fa-solid fa-heart text-[#D4AF37] mt-1"></i>
-          <p class="text-sm leading-relaxed">
-            Promise: clear communication, kind collaboration, and practical tech-so <span class="font-semibold">no one gets left behind</span>.
-          </p>
-        </div>
+      <div class="gc-body">
+        <dl class="gc-dl">
+          <div><dt>Based in</dt><dd>Philippines</dd></div>
+          <div><dt>Specialty</dt><dd>Websites & AI Integrations</dd></div>
+          <div><dt>Stack</dt><dd>Python • Django • JavaScript • HTMX/Alpine • Tailwind • PostgreSQL • APIs • OpenAI • Docker</dd></div>
+          <div><dt>Speaking</dt><dd>AI, Careers, Inclusive Tech</dd></div>
+        </dl>
       </div>
-
-      <!-- mini badges -->
-      <div class="mt-5 flex flex-wrap gap-2 text-xs">
-        <span class="px-2.5 py-1 rounded-full bg-black/5 text-black/80">Django REST</span>
-        <span class="px-2.5 py-1 rounded-full bg-black/5 text-black/80">Postgres</span>
-        <span class="px-2.5 py-1 rounded-full bg-black/5 text-black/80">Stripe/Payments</span>
-        <span class="px-2.5 py-1 rounded-full bg-black/5 text-black/80">OpenAI</span>
-        <span class="px-2.5 py-1 rounded-full bg-black/5 text-black/80">SEO & Performance</span>
+      <div class="gc-promise">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span>Promise: clear communication, kind collaboration, and practical tech so no one gets left behind.</span>
+      </div>
+      <div class="gc-chips">
+        <span class="gc-chip">Django REST</span>
+        <span class="gc-chip">Postgres</span>
+        <span class="gc-chip">Stripe/Payments</span>
+        <span class="gc-chip">OpenAI</span>
+        <span class="gc-chip">SEO & Performance</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Services (plain-English, outcome-first) -->
-<section id="services" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-  <div class="flex items-end justify-between gap-4 reveal" style="transition-delay:.05s">
-    <div>
-      <p class="text-xs uppercase tracking-wider text-black/60">How I can help</p>
-      <h2 class="text-3xl font-extrabold tracking-tight text-black">Which result do you want first?</h2>
-      <p class="mt-2 text-black/70 max-w-2xl">
-        Pick the lever that moves your business now—then we keep improving, step by step.
-      </p>
+<!-- SERVICES -->
+<section id="services">
+  <div class="svc-inner">
+    <div class="svc-top reveal">
+      <div>
+        <div class="s-eyebrow">How I can help</div>
+        <h2 class="s-title">Which result do you want <span class="accent">first?</span></h2>
+        <p class="hero-sub" style="margin-top:0.9rem;max-width:620px">Pick the lever that moves your business now — then I keep improving it, step by step.</p>
+      </div>
+      <a href="#contact" class="btn-primary"><i class="fa-solid fa-bolt"></i> Start a project</a>
     </div>
-    <a href="#contact" class="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1E3A8A] text-white hover:bg-[#172C6C] transition">
-      <i class="fa-solid fa-paper-plane"></i> Start a project
-    </a>
-  </div>
+    <div class="svc-grid">
+      <div class="svc-card reveal" style="transition-delay:.05s">
+        <div class="sc-num">01</div>
+        <div class="sc-icon-wrap"><i class="fa-solid fa-desktop"></i></div>
+        <h3>Need a site that wins trust & leads?</h3>
+        <p>Clear message, fast pages, easy updates — built to convert on every device.</p>
+        <ul class="sc-list">
+          <li>Home, Offer & Contact flows that make action obvious</li>
+          <li>Bookings, forms, or payments wired in</li>
+          <li>Speed + SEO engineered from day one</li>
+        </ul>
+        <div class="sc-foot">
+          <span class="sc-pill">Launch-ready</span>
+          <a href="#projects" class="sc-link">See examples →</a>
+        </div>
+      </div>
 
-  <div class="mt-8 grid gap-6 md:grid-cols-4">
-    <!-- Websites -->
-    <div class="group relative bg-white border rounded-2xl p-6 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 reveal" style="transition-delay:.05s">
-      <div class="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-[#D4AF37]/60 to-transparent"></div>
-      <div class="w-11 h-11 rounded-2xl bg-[#1E3A8A]/10 text-[#1E3A8A] grid place-items-center">
-        <i class="fa-solid fa-desktop"></i>
+      <div class="svc-card reveal" style="transition-delay:.1s">
+        <div class="sc-num">02</div>
+        <div class="sc-icon-wrap"><i class="fa-solid fa-brain"></i></div>
+        <h3>Want customers to get answers 24/7?</h3>
+        <p>Add a helpful assistant to your site or chat apps so fewer people bounce or ghost.</p>
+        <ul class="sc-list">
+          <li>Handles FAQs, captures leads, books calls</li>
+          <li>Works on WhatsApp / Messenger too</li>
+          <li>Automates simple tasks & handoffs</li>
+        </ul>
+        <div class="sc-foot">
+          <span class="sc-pill">Friendly & on-brand</span>
+          <a href="#contact" class="sc-link">Ask how it fits →</a>
+        </div>
       </div>
-      <h3 class="mt-4 text-lg font-semibold text-black">Need a site that wins trust & leads?</h3>
-      <p class="mt-2 text-sm text-black/70">Clear message, fast pages, easy updates—built to convert on mobile and desktop.</p>
-      <ul class="mt-4 space-y-2 text-sm text-black/80">
-        <li class="flex gap-2"><i class="fa-solid fa-check text-[#D4AF37] mt-1"></i><span>Home, Offer & Contact flows that make action obvious</span></li>
-        <li class="flex gap-2"><i class="fa-solid fa-check text-[#D4AF37] mt-1"></i><span>Bookings, forms, or payments wired in</span></li>
-        <li class="flex gap-2"><i class="fa-solid fa-check text-[#D4AF37] mt-1"></i><span>Speed + SEO baked in from day one</span></li>
-      </ul>
-      <div class="mt-5 flex items-center justify-between">
-        <span class="text-xs px-2 py-1 rounded-full bg-black/5 text-black/80">Launch-ready</span>
-        <a href="#projects" class="text-[#1E3A8A] hover:text-[#172C6C] text-sm font-medium">See examples →</a>
-      </div>
-    </div>
 
-    <!-- AI Tools -->
-    <div class="group relative bg-white border rounded-2xl p-6 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 reveal" style="transition-delay:.1s">
-      <div class="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-[#D4AF37]/60 to-transparent"></div>
-      <div class="w-11 h-11 rounded-2xl bg-[#1E3A8A]/10 text-[#1E3A8A] grid place-items-center">
-        <i class="fa-solid fa-brain"></i>
+      <div class="svc-card reveal" style="transition-delay:.15s">
+        <div class="sc-num">03</div>
+        <div class="sc-icon-wrap"><i class="fa-solid fa-microphone-lines"></i></div>
+        <h3>Team needs a gentle push into AI?</h3>
+        <p>Talks and hands-on sessions that build confidence — no jargon, just useful habits.</p>
+        <ul class="sc-list">
+          <li>Student talks & community workshops</li>
+          <li>Team training with real workflows</li>
+          <li>Practical, kind, and inclusive</li>
+        </ul>
+        <div class="sc-foot">
+          <span class="sc-pill">On-site or online</span>
+          <a href="#contact" class="sc-link">Invite me →</a>
+        </div>
       </div>
-      <h3 class="mt-4 text-lg font-semibold text-black">Want customers to get answers 24/7?</h3>
-      <p class="mt-2 text-sm text-black/70">Add a helpful assistant to your site or chat apps so fewer people bounce or ghost.</p>
-      <ul class="mt-4 space-y-2 text-sm text-black/80">
-        <li class="flex gap-2"><i class="fa-solid fa-check text-[#D4AF37] mt-1"></i><span>Handles FAQs, captures leads, books calls</span></li>
-        <li class="flex gap-2"><i class="fa-solid fa-check text-[#D4AF37] mt-1"></i><span>Works on WhatsApp / Messenger too</span></li>
-        <li class="flex gap-2"><i class="fa-solid fa-check text-[#D4AF37] mt-1"></i><span>Automates simple tasks & handoffs</span></li>
-      </ul>
-      <div class="mt-5 flex items-center justify-between">
-        <span class="text-xs px-2 py-1 rounded-full bg-black/5 text-black/80">Friendly & on-brand</span>
-        <a href="#contact" class="text-[#1E3A8A] hover:text-[#172C6C] text-sm font-medium">Ask how it fits →</a>
-      </div>
-    </div>
 
-    <!-- Speaking & Coaching -->
-    <div class="group relative bg-white border rounded-2xl p-6 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 reveal" style="transition-delay:.15s">
-      <div class="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-[#D4AF37]/60 to-transparent"></div>
-      <div class="w-11 h-11 rounded-2xl bg-[#1E3A8A]/10 text-[#1E3A8A] grid place-items-center">
-        <i class="fa-solid fa-microphone-lines"></i>
-      </div>
-      <h3 class="mt-4 text-lg font-semibold text-black">Team needs a gentle push into AI?</h3>
-      <p class="mt-2 text-sm text-black/70">Talks and hands-on sessions that build confidence—no jargon, just useful habits.</p>
-      <ul class="mt-4 space-y-2 text-sm text-black/80">
-        <li class="flex gap-2"><i class="fa-solid fa-check text-[#D4AF37] mt-1"></i><span>Student talks & community workshops</span></li>
-        <li class="flex gap-2"><i class="fa-solid fa-check text-[#D4AF37] mt-1"></i><span>Team training with real workflows</span></li>
-        <li class="flex gap-2"><i class="fa-solid fa-check text-[#D4AF37] mt-1"></i><span>Practical, kind, and inclusive</span></li>
-      </ul>
-      <div class="mt-5 flex items-center justify-between">
-        <span class="text-xs px-2 py-1 rounded-full bg-black/5 text-black/80">On-site or online</span>
-        <a href="#contact" class="text-[#1E3A8A] hover:text-[#172C6C] text-sm font-medium">Invite me →</a>
-      </div>
-    </div>
-
-    <!-- Care & Support -->
-    <div class="group relative bg-white border rounded-2xl p-6 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 reveal" style="transition-delay:.2s">
-      <div class="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-[#D4AF37]/60 to-transparent"></div>
-      <div class="w-11 h-11 rounded-2xl bg-[#1E3A8A]/10 text-[#1E3A8A] grid place-items-center">
-        <i class="fa-solid fa-life-ring"></i>
-      </div>
-      <h3 class="mt-4 text-lg font-semibold text-black">Want someone to keep it running?</h3>
-      <p class="mt-2 text-sm text-black/70">I maintain, monitor, and polish monthly—so you can focus on the work that pays.</p>
-      <ul class="mt-4 space-y-2 text-sm text-black/80">
-        <li class="flex gap-2"><i class="fa-solid fa-check text-[#D4AF37] mt-1"></i><span>Updates, backups, quick fixes</span></li>
-        <li class="flex gap-2"><i class="fa-solid fa-check text-[#D4AF37] mt-1"></i><span>Content edits & small improvements</span></li>
-        <li class="flex gap-2"><i class="fa-solid fa-check text-[#D4AF37] mt-1"></i><span>Speed & uptime checks</span></li>
-      </ul>
-      <div class="mt-5 flex items-center justify-between">
-        <span class="text-xs px-2 py-1 rounded-full bg-black/5 text-black/80">Peace of mind</span>
-        <a href="#contact" class="text-[#1E3A8A] hover:text-[#172C6C] text-sm font-medium">Ask about plans →</a>
+      <div class="svc-card reveal" style="transition-delay:.2s">
+        <div class="sc-num">04</div>
+        <div class="sc-icon-wrap"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+        <h3>Want someone to keep it running?</h3>
+        <p>I maintain, monitor, and polish monthly — so you can focus on the work that pays.</p>
+        <ul class="sc-list">
+          <li>Updates, backups, quick fixes</li>
+          <li>Content edits & small improvements</li>
+          <li>Speed & uptime checks</li>
+        </ul>
+        <div class="sc-foot">
+          <span class="sc-pill">Peace of mind</span>
+          <a href="#contact" class="sc-link">Ask about plans →</a>
+        </div>
       </div>
     </div>
-  </div>
-
-  <!-- Section CTA (mobile) -->
-  <div class="mt-8 md:hidden reveal" style="transition-delay:.25s">
-    <a href="#contact" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#1E3A8A] text-white hover:bg-[#172C6C] transition">
-      <i class="fa-solid fa-paper-plane"></i> Start a project
-    </a>
-  </div>
-
-  <!-- Bundle note -->
-  <div class="mt-8 text-sm text-black/70 reveal" style="transition-delay:.3s">
-    Not sure what you need? Tell me your goal and budget—I’ll suggest the quickest path.
+    <p style="margin-top:1.5rem;font-size:0.85rem;color:rgba(255,255,255,0.9);letter-spacing:0.05em" class="reveal">Not sure what you need? Tell me your goal and budget — I'll suggest the quickest path.</p>
   </div>
 </section>
 
-
-<!-- Process -->
-<section id="process" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-  <div class="mb-8 reveal" style="transition-delay:.05s">
-    <p class="text-xs uppercase tracking-wider text-black/60">How we’ll work</p>
-    <h2 class="text-3xl font-extrabold tracking-tight text-black">Your goals. Your pace. Your win.</h2>
-    <p class="mt-2 text-black/70 max-w-2xl">
-      You call the shots—I make it effortless. Clear choices, steady momentum, and results you can point to.
-    </p>
-  </div>
-
-  <div class="grid gap-6 md:grid-cols-4">
-    <div class="bg-white border rounded-2xl p-6 hover:shadow-md transition reveal" style="transition-delay:.05s">
-      <div class="w-9 h-9 rounded-full bg-[#1E3A8A] text-white grid place-items-center font-bold">1</div>
-      <h3 class="mt-3 font-semibold text-black">Plan around <em>your</em> outcomes</h3>
-      <p class="mt-1 text-sm text-black/70">
-        You tell me the win you want. I shape a simple scope, timeline, and budget—approved by you.
-      </p>
+<!-- PROCESS -->
+<section id="process">
+  <div class="proc-inner">
+    <div class="reveal">
+      <div class="s-eyebrow">How I work with you</div>
+      <h2 class="s-title">Your goals. Your pace. Your <span class="accent">win.</span></h2>
+      <p class="hero-sub" style="margin-top:0.9rem;max-width:700px">You call the shots. I make it effortless. Clear choices, steady momentum, and results you can point to.</p>
     </div>
-
-    <div class="bg-white border rounded-2xl p-6 hover:shadow-md transition reveal" style="transition-delay:.1s">
-      <div class="w-9 h-9 rounded-full bg-[#1E3A8A] text-white grid place-items-center font-bold">2</div>
-      <h3 class="mt-3 font-semibold text-black">Blueprint in your language</h3>
-      <p class="mt-1 text-sm text-black/70">
-        No jargon—just clear screens and flows. You review, keep what you love, and we lock it in together.
-      </p>
-    </div>
-
-    <div class="bg-white border rounded-2xl p-6 hover:shadow-md transition reveal" style="transition-delay:.15s">
-      <div class="w-9 h-9 rounded-full bg-[#1E3A8A] text-white grid place-items-center font-bold">3</div>
-      <h3 class="mt-3 font-semibold text-black">Build with your feedback loop</h3>
-      <p class="mt-1 text-sm text-black/70">
-        Weekly clickable drops. You test, I refine. Fast iterations so every step feels like progress.
-      </p>
-    </div>
-
-    <div class="bg-white border rounded-2xl p-6 hover:shadow-md transition reveal" style="transition-delay:.2s">
-      <div class="w-9 h-9 rounded-full bg-[#1E3A8A] text-white grid place-items-center font-bold">4</div>
-      <h3 class="mt-3 font-semibold text-black">Launch like a pro—on your terms</h3>
-      <p class="mt-1 text-sm text-black/70">
-        Confident go-live, quick how-to, and clean handoff. Keep me on for care and growth if you’d like.
-      </p>
-    </div>
-  </div>
-
-  <!-- Promise + mini benefits -->
-  <div class="mt-8 grid gap-6 md:grid-cols-3">
-    <div class="bg-white border rounded-2xl p-6 reveal" style="transition-delay:.1s">
-      <div class="flex items-start gap-3">
-        <i class="fa-solid fa-handshake text-[#D4AF37] mt-1"></i>
-        <div>
-          <h4 class="font-semibold text-black">You first, always</h4>
-          <p class="mt-1 text-sm text-black/70">Plain-English updates. No surprise fees. You own your code, content, and data.</p>
-        </div>
+    <div class="proc-track">
+      <div class="proc-step reveal" style="transition-delay:.05s">
+        <div class="p-circle">01</div>
+        <h3>Plan around your outcomes</h3>
+        <p>You tell me the win you want. I shape a simple scope, timeline, and budget — approved by you.</p>
+      </div>
+      <div class="proc-step reveal" style="transition-delay:.1s">
+        <div class="p-circle">02</div>
+        <h3>Blueprint in your language</h3>
+        <p>No jargon — just clear screens and flows. You review, keep what you love, and I lock it in with you.</p>
+      </div>
+      <div class="proc-step reveal" style="transition-delay:.15s">
+        <div class="p-circle">03</div>
+        <h3>Build with your feedback loop</h3>
+        <p>Weekly clickable drops. You test, I refine. Fast iterations so every step feels like progress.</p>
+      </div>
+      <div class="proc-step reveal" style="transition-delay:.2s">
+        <div class="p-circle">04</div>
+        <h3>Launch like a pro — on your terms</h3>
+        <p>Confident go-live, quick how-to, and clean handoff. Keep me on for care and growth if you'd like.</p>
       </div>
     </div>
-    <div class="bg-white border rounded-2xl p-6 reveal" style="transition-delay:.15s">
-      <div class="flex items-start gap-3">
-        <i class="fa-solid fa-gauge-high text-[#1E3A8A] mt-1"></i>
-        <div>
-          <h4 class="font-semibold text-black">Momentum you can feel</h4>
-          <p class="mt-1 text-sm text-black/70">Small, steady wins every week—so you always know what’s done and what’s next.</p>
-        </div>
+    <div class="proc-promises">
+      <div class="pp reveal" style="transition-delay:.1s">
+        <div class="pp-icon"><i class="fa-solid fa-handshake"></i></div>
+        <div><h4>You first, always</h4><p>Plain-English updates. No surprise fees. You own your code, content, and data.</p></div>
+      </div>
+      <div class="pp reveal" style="transition-delay:.15s">
+        <div class="pp-icon"><i class="fa-solid fa-bolt"></i></div>
+        <div><h4>Momentum you can feel</h4><p>Small, steady wins every week. Always know what's done and what's next.</p></div>
+      </div>
+      <div class="pp reveal" style="transition-delay:.2s">
+        <div class="pp-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <div><h4>On your side</h4><p>Kind, patient, and reliable — so your team feels supported, not overwhelmed.</p></div>
       </div>
     </div>
-    <div class="bg-white border rounded-2xl p-6 reveal" style="transition-delay:.2s">
-      <div class="flex items-start gap-3">
-        <i class="fa-solid fa-heart text-[#D4AF37] mt-1"></i>
-        <div>
-          <h4 class="font-semibold text-black">On your side</h4>
-          <p class="mt-1 text-sm text-black/70">Kind, patient, and reliable—so your team feels supported, not overwhelmed.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- CTA -->
-  <div class="mt-8 reveal" style="transition-delay:.25s">
-    <a href="#contact" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-black text-white hover:bg-black/90 font-semibold transition">
-      <i class="fa-solid fa-paper-plane"></i> Map my plan
-    </a>
+    <div class="proc-cta reveal"><a href="#contact" class="btn-primary"><i class="fa-solid fa-bolt"></i> Map my plan</a></div>
   </div>
 </section>
 
-
-<!-- Stack strip -->
-<section class="bg-white border-y">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 reveal" style="transition-delay:.05s">
-    <p class="text-xs uppercase tracking-wider text-black/60">What I build with</p>
-    <div class="mt-4 flex flex-wrap gap-2 text-xs">
-      <!-- Core tech -->
-      <span class="px-2.5 py-1 rounded-full bg-black/5 text-black/80">Python</span>
-      <span class="px-2.5 py-1 rounded-full bg-black/5 text-black/80">JavaScript</span>
-      <span class="px-2.5 py-1 rounded-full bg-black/5 text-black/80">Django</span>
-      <span class="px-2.5 py-1 rounded-full bg-black/5 text-black/80">HTML / CSS</span>
-
-      <!-- Data & infra -->
-      <span class="px-2.5 py-1 rounded-full bg-black/5 text-black/80">PostgreSQL</span>
-      <span class="px-2.5 py-1 rounded-full bg-black/5 text-black/80">Docker</span>
-      <span class="px-2.5 py-1 rounded-full bg-black/5 text-black/80">Vercel</span>
-      <span class="px-2.5 py-1 rounded-full bg-black/5 text-black/80">Railway</span>
-
-      <!-- AI & integrations -->
-      <span class="px-2.5 py-1 rounded-full bg-black/5 text-black/80">AI (OpenAI)</span>
-      <span class="px-2.5 py-1 rounded-full bg-black/5 text-black/80">APIs & Webhooks</span>
-
-      <!-- Payments -->
-      <span class="px-2.5 py-1 rounded-full bg-black/5 text-black/80">Stripe</span>
-      <span class="px-2.5 py-1 rounded-full bg-black/5 text-black/80">PayMongo</span>
-      <span class="px-2.5 py-1 rounded-full bg-black/5 text-black/80">PayPal</span>
-
-      <!-- Growth -->
-      <span class="px-2.5 py-1 rounded-full bg-black/5 text-black/80">SEO & Analytics</span>
+<!-- STACK -->
+<section id="stack">
+  <div class="stack-inner">
+    <span class="stack-lbl">Built with</span>
+    <div class="chips">
+      <span class="chip">Python</span><span class="chip">JavaScript</span>
+      <span class="chip">Django</span><span class="chip">HTML / CSS</span>
+      <span class="chip">PostgreSQL</span><span class="chip">Docker</span>
+      <span class="chip">Vercel</span><span class="chip">Railway</span>
+      <span class="chip">AI (OpenAI)</span>
+      <span class="chip">APIs & Webhooks</span><span class="chip">Stripe</span>
+      <span class="chip">PayMongo</span><span class="chip">PayPal</span>
+      <span class="chip">SEO & Analytics</span>
     </div>
   </div>
 </section>
 
-
-<!-- Projects -->
-<section id="projects" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-  <div class="flex items-end justify-between gap-4 reveal" style="transition-delay:.05s">
-    <h2 class="text-2xl font-bold tracking-tight text-black">Featured Projects</h2>
-    <a href="#contact" class="text-[#1E3A8A] hover:text-[#172C6C] font-medium">Hire me</a>
-  </div>
-  <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-    {% for p in projects %}
-      <a href="{{ p.url }}" target="_blank" rel="noopener"
-         class="group bg-white border rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 reveal"
-         style="transition-delay: {{ forloop.counter0|add:'1' }}00ms">
-        <div class="aspect-video bg-black/5 overflow-hidden">
-          <img src="{{ p.image|default:'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80' }}"
-               alt="{{ p.title }} preview" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="proj-inner">
+    <div class="proj-header reveal">
+      <div>
+        <div class="s-eyebrow">Featured Projects</div>
+        <h2 class="s-title">REAL <span class="accent">RESULTS</span><br>IN THE WILD.</h2>
+      </div>
+      <a href="#contact" class="btn-outline">Hire me</a>
+    </div>
+    <div class="proj-grid">
+      {% for project in projects %}
+      <a href="{{ project.url }}" class="proj-card reveal" target="_blank" rel="noopener noreferrer">
+        <div class="proj-thumb">
+          <img src="{{ project.image }}" alt="{{ project.title }}"/>
+          <div class="proj-thumb-overlay"></div>
         </div>
-        <div class="p-5">
-          <div class="flex items-center justify-between">
-            <h3 class="font-semibold group-hover:text-[#1E3A8A] text-black">{{ p.title }}</h3>
-            <i class="fa-solid fa-arrow-up-right-from-square text-black/40 group-hover:text-[#1E3A8A]"></i>
-          </div>
-          <p class="mt-2 text-sm text-black/70 truncate">{{ p.url }}</p>
+        <div class="proj-meta">
+          <div><h3>{{ project.title }}</h3><p>{{ project.url }}</p></div>
+          <i class="fa-solid fa-arrow-up-right-from-square p-arrow"></i>
         </div>
       </a>
-    {% empty %}
-      <p class="text-black/70">Projects coming soon.</p>
-    {% endfor %}
+      {% empty %}
+      <div class="proj-card reveal">
+        <div class="proj-meta">
+          <div><h3>Projects coming soon</h3><p>Please check back shortly.</p></div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
   </div>
 </section>
 
-<!-- Contact -->
-<section id="contact" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-  <div class="bg-gradient-to-r from-[#1E3A8A] to-black rounded-3xl text-white p-10 reveal" style="transition-delay:.1s">
-    <div class="grid md:grid-cols-2 gap-10 items-start">
-      <!-- Left -->
-      <div>
-        <h2 class="text-3xl font-extrabold">Let’s build something great</h2>
-        <p class="mt-2 text-white/90">
-          Tell me what you need-website, AI assistant, automations, or a speaking invite.
-          I reply within 1 business day.
-        </p>
-
-        {% if messages %}
-          <div class="mt-6 space-y-3">
-            {% for message in messages %}
-              <div class="rounded-xl bg-white/10 border border-white/20 px-4 py-3 text-sm">{{ message }}</div>
-            {% endfor %}
-          </div>
-        {% endif %}
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="contact-wrap reveal">
+      <div class="sphere-deco"></div>
+      <div class="c-left">
+        <div class="s-eyebrow" style="margin-bottom:1.5rem">Let's build something great</div>
+        <h2 class="contact-title">Tell me what you need —<br>website, AI assistant,<br>automations, or a <em class="no-orphan">speaking invite.</em></h2>
+        <p>I reply within 1 business day.</p>
+        <div class="c-details">
+          <div class="c-row"><i class="fa-solid fa-clock"></i><span>Reply within 1 business day</span></div>
+          <div class="c-row"><i class="fa-solid fa-location-dot"></i><span>Philippines — works globally</span></div>
+          <div class="c-row"><i class="fa-solid fa-code"></i><span>You own your code, always</span></div>
+        </div>
       </div>
-
-      <!-- Right: form card -->
-      <div class="bg-white text-black rounded-2xl p-6 shadow-lg">
-        <form method="post" action="{% url 'contact_submit' %}" novalidate class="space-y-4" id="contact-form">
+      <div class="c-right">
+        <form method="post" action="{% url 'contact_submit' %}" novalidate>
           {% csrf_token %}
-
-          <!-- Honeypot (leave empty) -->
-          <div class="hidden" aria-hidden="true">
-            <label>Leave this empty
-              <input type="text" name="hp" tabindex="-1" autocomplete="off" />
-            </label>
+          <div style="display:none"><input type="text" name="hp" tabindex="-1" autocomplete="off"></div>
+          <div class="frow">
+            <div class="fg"><label>Your name</label><input name="name" type="text" required placeholder="Jane Doe"></div>
+            <div class="fg"><label>Email</label><input name="email" type="email" required placeholder="you@example.com"></div>
           </div>
-
-          <div class="grid sm:grid-cols-2 gap-4">
-            <div>
-              <label for="name" class="text-sm font-medium">Your name</label>
-              <input id="name" name="name" type="text" required
-                     class="mt-1 w-full rounded-xl border-black/20 focus:border-[#1E3A8A] focus:ring-[#1E3A8A] px-3 py-2"
-                     placeholder="Jane Doe" value="{{ form.name.value|default_if_none:'' }}">
-              {% if form and form.name.errors %}<p class="text-xs text-rose-600 mt-1">{{ form.name.errors.0 }}</p>{% endif %}
-            </div>
-            <div>
-              <label for="email" class="text-sm font-medium">Email</label>
-              <input id="email" name="email" type="email" required
-                     class="mt-1 w-full rounded-xl border-black/20 focus:border-[#1E3A8A] focus:ring-[#1E3A8A] px-3 py-2"
-                     placeholder="you@example.com" value="{{ form.email.value|default_if_none:'' }}">
-              {% if form and form.email.errors %}<p class="text-xs text-rose-600 mt-1">{{ form.email.errors.0 }}</p>{% endif %}
-            </div>
-          </div>
-
-          <div class="grid sm:grid-cols-2 gap-4">
-            <div>
-              <label for="project_type" class="text-sm font-medium">What do you need?</label>
-              <select id="project_type" name="project_type"
-                      class="mt-1 w-full rounded-xl border-black/20 focus:border-[#1E3A8A] focus:ring-[#1E3A8A] px-3 py-2">
-                <option value="Website">Website</option>
-                <option value="AI Assistant">AI Assistant</option>
-                <option value="Both">Both (Website + AI)</option>
-                <option value="Other">Other</option>
+          <div class="frow">
+            <div class="fg">
+              <label>What do you need?</label>
+              <select name="project_type">
+                <option>Website</option>
+                <option>AI Assistant</option>
+                <option>Both (Website + AI)</option>
+                <option>NFC Experience</option>
+                <option>Other</option>
               </select>
             </div>
-            <div>
-              <label for="budget" class="text-sm font-medium">Budget (rough)</label>
-              <select id="budget" name="budget"
-                      class="mt-1 w-full rounded-xl border-black/20 focus:border-[#1E3A8A] focus:ring-[#1E3A8A] px-3 py-2">
-                <option value="Not sure yet">Not sure yet</option>
-                <option value="Under ₱50k">Under ₱50k</option>
-                <option value="₱50k–₱100k">₱50k–₱100k</option>
-                <option value="₱100k+">₱100k+</option>
+            <div class="fg">
+              <label>Budget (rough)</label>
+              <select name="budget">
+                <option>Not sure yet</option>
+                <option>Under ₱50k</option>
+                <option>₱50k–₱100k</option>
+                <option>₱100k+</option>
               </select>
             </div>
           </div>
-
-          <div>
-            <label for="message" class="text-sm font-medium">Tell me a bit about it</label>
-            <textarea id="message" name="message" rows="4" required
-                      class="mt-1 w-full rounded-xl border-black/20 focus:border-[#1E3A8A] focus:ring-[#1E3A8A] px-3 py-2"
-                      placeholder="What are you trying to build? What does success look like?">{{ form.message.value|default_if_none:'' }}</textarea>
-            {% if form and form.message.errors %}<p class="text-xs text-rose-600 mt-1">{{ form.message.errors.0 }}</p>{% endif %}
-          </div>
-
-          <div class="flex items-center justify-between gap-3">
-            <p class="text-xs text-black/60">By sending, you agree to be contacted by email.</p>
-            <button type="submit"
-                    class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-black text-white hover:bg-black/90 font-semibold transition active:scale-[.98]">
-              <i class="fa-solid fa-paper-plane"></i> Send message
-            </button>
+          <div class="fg"><label>Tell me a bit about it</label><textarea name="message" rows="4" required placeholder="What are you trying to build? What does success look like?"></textarea></div>
+          <div class="form-foot">
+            <span class="form-note">By sending, you agree to be contacted by email.</span>
+            <button type="submit" class="btn-primary"><i class="fa-solid fa-paper-plane"></i> Send message</button>
           </div>
         </form>
       </div>
@@ -540,4 +1330,182 @@
   </div>
 </section>
 
-{% endblock %}
+<footer>
+  <p>Let’s build something people need. · Websites • AI tools • Coaching • Speaking · © 2026 Julia Victorio. All rights reserved.</p>
+  <div class="footer-right">
+    <a href="mailto:juliavictorio16@gmail.com">juliavictorio16@gmail.com</a>
+    <div class="footer-social">
+      <a href="https://www.linkedin.com/in/julia-victorio-332b971b4/" class="footer-icon" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+      <a href="https://github.com/Jvictorio09" class="footer-icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+    </div>
+  </div>
+</footer>
+
+<!-- Floating AI Chat -->
+<div class="floating-chat" aria-live="polite">
+  <div class="chat-panel" id="chat-panel">
+    <div class="chat-head">
+      <span>Ask Julia AI</span>
+      <button type="button" id="chat-close" aria-label="Close chat"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="chat-body" id="chat-body">
+      <div class="chat-msg bot">Hi! Ask me about services, timeline, or pricing. Then fill out the process form, or contact Julia directly on WhatsApp.</div>
+    </div>
+    <div class="chat-input">
+      <input id="chat-input" type="text" placeholder="Type your question..." />
+      <button id="chat-send" type="button" aria-label="Send message"><i class="fa-solid fa-paper-plane"></i></button>
+    </div>
+  </div>
+  <button class="chat-toggle" id="chat-toggle" type="button" aria-label="Open AI chat">
+    <i class="fa-solid fa-comments"></i>
+  </button>
+</div>
+
+<!-- Floating WhatsApp -->
+<a class="floating-whatsapp" href="https://wa.me/639637386001" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+  <i class="fa-brands fa-whatsapp"></i>
+</a>
+
+<script>
+/* ── CURSOR ── */
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cur.style.left=mx+'px';cur.style.top=my+'px';
+});
+(function animRing(){
+  rx+=(mx-rx)*0.1;ry+=(my-ry)*0.1;
+  ring.style.left=rx+'px';ring.style.top=ry+'px';
+  requestAnimationFrame(animRing);
+})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.transform='translate(-50%,-50%) scale(2.5)';});
+  el.addEventListener('mouseleave',()=>{cur.style.transform='translate(-50%,-50%) scale(1)';});
+});
+
+/* ── PARTICLE CANVAS ── */
+const canvas=document.getElementById('canvas-bg');
+const ctx=canvas.getContext('2d');
+let W,H,particles=[];
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resize();window.addEventListener('resize',resize);
+
+function Particle(){
+  this.x=Math.random()*W;
+  this.y=Math.random()*H;
+  this.size=Math.random()*1.5+0.3;
+  this.vx=(Math.random()-0.5)*0.3;
+  this.vy=(Math.random()-0.5)*0.3;
+  this.alpha=Math.random()*0.5+0.1;
+  this.color=Math.random()<0.7?'0,150,255':'0,212,255';
+}
+for(let i=0;i<120;i++)particles.push(new Particle());
+
+function drawLines(){
+  for(let i=0;i<particles.length;i++){
+    for(let j=i+1;j<particles.length;j++){
+      const dx=particles[i].x-particles[j].x;
+      const dy=particles[i].y-particles[j].y;
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<130){
+        ctx.beginPath();
+        ctx.strokeStyle=`rgba(0,120,255,${0.08*(1-dist/130)})`;
+        ctx.lineWidth=0.5;
+        ctx.moveTo(particles[i].x,particles[i].y);
+        ctx.lineTo(particles[j].x,particles[j].y);
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+function animParticles(){
+  ctx.clearRect(0,0,W,H);
+  particles.forEach(p=>{
+    p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0||p.x>W)p.vx*=-1;
+    if(p.y<0||p.y>H)p.vy*=-1;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+    ctx.fillStyle=`rgba(${p.color},${p.alpha})`;
+    ctx.fill();
+  });
+  drawLines();
+  requestAnimationFrame(animParticles);
+}
+animParticles();
+
+/* ── SCROLL REVEAL ── */
+const obs=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});
+},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* ── HERO LOAD SEQUENCE ── */
+window.addEventListener('DOMContentLoaded',()=>{
+  const heroRevealEls=[...document.querySelectorAll('.hero .reveal')];
+  heroRevealEls.forEach((el,i)=>{
+    setTimeout(()=>el.classList.add('in'),40+(i*90));
+  });
+});
+
+/* ── FLOATING AI CHAT ── */
+const chatPanel=document.getElementById('chat-panel');
+const chatToggle=document.getElementById('chat-toggle');
+const chatClose=document.getElementById('chat-close');
+const chatBody=document.getElementById('chat-body');
+const chatInput=document.getElementById('chat-input');
+const chatSend=document.getElementById('chat-send');
+const chatHistory=[];
+
+function pushChatMsg(role,text){
+  const el=document.createElement('div');
+  el.className=`chat-msg ${role}`;
+  el.textContent=text;
+  chatBody.appendChild(el);
+  chatBody.scrollTop=chatBody.scrollHeight;
+}
+
+async function sendChat(){
+  const message=(chatInput.value||'').trim();
+  if(!message)return;
+  pushChatMsg('user',message);
+  chatHistory.push({role:'user',content:message});
+  chatInput.value='';
+  chatInput.disabled=true;chatSend.disabled=true;
+  pushChatMsg('bot','Typing...');
+  const typingEl=chatBody.lastElementChild;
+
+  try{
+    const res=await fetch("{% url 'ai_chat' %}",{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({message,history:chatHistory.slice(-8)})
+    });
+    const data=await res.json();
+    typingEl.remove();
+    const answer=(data&&data.answer)?data.answer:"Sorry, I couldn't respond right now. Please try again.";
+    pushChatMsg('bot',answer);
+    chatHistory.push({role:'assistant',content:answer});
+  }catch(_err){
+    typingEl.remove();
+    pushChatMsg('bot',"Something went wrong. Please try again, fill out the process form, or contact Julia directly on WhatsApp.");
+  }finally{
+    chatInput.disabled=false;chatSend.disabled=false;
+    chatInput.focus();
+  }
+}
+
+chatToggle.addEventListener('click',()=>{
+  chatPanel.classList.toggle('open');
+  if(chatPanel.classList.contains('open'))chatInput.focus();
+});
+chatClose.addEventListener('click',()=>chatPanel.classList.remove('open'));
+chatSend.addEventListener('click',sendChat);
+chatInput.addEventListener('keydown',e=>{
+  if(e.key==='Enter'){e.preventDefault();sendChat();}
+});
+</script>
+</body>
+</html>

@@ -21,6 +21,13 @@ PREVIEWS = [
 
 def home(request):
     links = [
+        ("Noura's Magic Touch", "https://www.nourasmagictouch.me/"),
+        ("Fluentory", "https://www.fluentory.me/"),
+        ("Sharp Hair Shop", "https://www.sharphair.shop/"),
+        ("Hammer Services", "https://www.hammer-services.com/"),
+        ("Telos", "https://telos.katek-ai.com/"),
+        ("Gold Leaf Scapes", "https://www.goldleafscapes.com/"),
+        ("Madrid Marble", "https://www.madridmarble.com/"),
         ("Michael H. Moore", "https://www.michaelhmoore.life/"),
         ("World AI X Summit", "https://www.worldaixsummit.com/"),
         ("The Lion You Don’t See", "https://www.thelionyoudontsee.com/"),
@@ -46,7 +53,7 @@ def home(request):
         {
             "projects": projects,
             "hero_image_url": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1920&q=80",
-            "headshot_url": "https://res.cloudinary.com/dkjtfjnlf/image/upload/f_auto,q_auto/juliavictorio_asmi2l.jpg",
+            "headshot_url": "https://res.cloudinary.com/dzdi9ndf9/image/upload/q_auto/f_auto/v1776023430/Headshot_profile_julia_ay25n2.png",
         },
     )
 
@@ -103,13 +110,18 @@ def contact_submit(request):
 
 # myApp/views.py
 import os, json
+import re
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from dotenv import load_dotenv
+
+load_dotenv()
+OPENAI_KEY = os.getenv("OPENAI_API_KEY") or os.getenv("OPENAI_API_KEYOP")
 
 try:
     # New-style SDK
     from openai import OpenAI
-    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    client = OpenAI(api_key=OPENAI_KEY)
     def chat_completion(messages):
         resp = client.chat.completions.create(
             model="gpt-4o-mini", temperature=0.6, messages=messages
@@ -118,7 +130,7 @@ try:
 except Exception:
     # Fallback if older SDK is installed
     import openai
-    openai.api_key = os.getenv("OPENAI_API_KEY")
+    openai.api_key = OPENAI_KEY
     def chat_completion(messages):
         resp = openai.ChatCompletion.create(
             model="gpt-3.5-turbo", temperature=0.6, messages=messages
@@ -130,9 +142,51 @@ SYSTEM_PROMPT = (
     "Help visitors understand Julia’s services (websites, AI assistants, coaching), "
     "process (plan/blueprint/build/launch), pricing expectations, typical timelines (1–3 weeks), "
     "and next steps. Use plain English. If asked for quotes, give friendly rough ranges and invite them "
-    "to the contact form. When relevant, propose a short, actionable next step. "
+    "to fill out the process/contact form. Also mention they can contact Julia directly on WhatsApp. "
+    "Only answer topics related to Julia's services, projects, process, pricing, timeline, availability, "
+    "or contacting Julia. If a question is unrelated (coding tasks, random trivia, medical/legal/personal help), "
+    "politely decline and redirect them to the process form or WhatsApp. "
+    "When relevant, propose a short, actionable next step. "
     "Never promise legal/medical/financial advice. Keep answers under 6–8 sentences unless asked for more."
 )
+
+IN_SCOPE_KEYWORDS = (
+    "julia", "service", "services", "website", "web site", "web design", "landing page", "funnel",
+    "ai", "assistant", "chatbot", "automation", "automations", "nfc", "stripe", "payment", "paymongo",
+    "paypal", "project", "projects", "portfolio", "pricing", "price", "cost", "quote", "budget",
+    "timeline", "launch", "booking", "lead", "seo", "speed", "maintenance", "support", "workshop",
+    "training", "speaking", "coaching", "contact", "whatsapp", "process", "form"
+)
+
+OFF_TOPIC_PATTERNS = (
+    r"\bhello world\b",
+    r"\bwrite (a|an|the)? ?code\b",
+    r"\bpython code\b",
+    r"\bjavascript code\b",
+    r"\bjava code\b",
+    r"\bdebug\b",
+    r"\bsolve (my|this) (exam|assignment|homework)\b",
+    r"\bmedical advice\b",
+    r"\bdiagnose\b",
+)
+
+SIMPLE_GREETINGS = {"hi", "hello", "hey", "good morning", "good afternoon", "good evening"}
+
+OFF_TOPIC_REPLY = (
+    "I can help with Julia's services, pricing, timelines, and project planning. "
+    "Please fill out the process form, or contact Julia directly on WhatsApp for next steps."
+)
+
+
+def _is_in_scope_message(text: str) -> bool:
+    msg = (text or "").strip().lower()
+    if not msg:
+        return False
+    if msg in SIMPLE_GREETINGS:
+        return True
+    if any(re.search(pattern, msg) for pattern in OFF_TOPIC_PATTERNS):
+        return False
+    return any(keyword in msg for keyword in IN_SCOPE_KEYWORDS)
 
 @csrf_exempt
 def ai_chat(request):
@@ -145,6 +199,10 @@ def ai_chat(request):
 
         if not user_msg:
             return JsonResponse({"error": "Empty message"}, status=400)
+        if not OPENAI_KEY:
+            return JsonResponse({"error": "OpenAI API key not configured."}, status=500)
+        if not _is_in_scope_message(user_msg):
+            return JsonResponse({"answer": OFF_TOPIC_REPLY})
 
         messages = [{"role": "system", "content": SYSTEM_PROMPT}]
         # keep last few turns
