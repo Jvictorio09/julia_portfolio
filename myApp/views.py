@@ -53,7 +53,7 @@ def home(request):
         {
             "projects": projects,
             "hero_image_url": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1920&q=80",
-            "headshot_url": "https://res.cloudinary.com/dzdi9ndf9/image/upload/q_auto/f_auto/v1776023430/Headshot_profile_julia_ay25n2.png",
+            "headshot_url": "https://res.cloudinary.com/dzdi9ndf9/image/upload/v1776054769/1_tdnkml.png",
         },
     )
 
