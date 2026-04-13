@@ -192,7 +192,7 @@ nav{
 .cube-portrait{
   position:absolute;left:50%;top:50%;
   transform:translate(-50%,-50%);
-  width:520px;height:620px;
+  width:560px;height:670px;
   z-index:3;pointer-events:none;
 }
 .cube-portrait.reveal{transform:translate(-50%,-50%) translateY(30px)}
@@ -201,11 +201,9 @@ nav{
   content:'';
   position:absolute;inset:2.5% 7% auto auto;
   width:84%;height:93%;
-  border:none;
-  border-top:1px solid rgba(255,255,255,0.28);
-  border-left:1px solid rgba(255,255,255,0.28);
+  border:1px solid rgba(255,255,255,0.25);
   border-radius:10px;
-  transform:translate(-10px,-10px);
+  transform:translate(12px,12px);
   z-index:-1;
   box-shadow:0 30px 90px rgba(0,0,0,0.5);
 }
@@ -213,33 +211,10 @@ nav{
   width:100%;height:100%;
   object-fit:cover;object-position:center center;
   border-radius:10px;
-  border:none;
-  filter:drop-shadow(0 24px 48px rgba(0,0,0,0.42));
+  border:1px solid rgba(255,255,255,0.28);
+  filter:brightness(1.1) contrast(1.12) saturate(1.03) drop-shadow(0 30px 60px rgba(0,0,0,0.5));
   mix-blend-mode:normal;
   opacity:1;
-}
-.cube-portrait.ara{
-  width:430px;height:530px;
-  left:79%;top:62%;
-  transform:translate(-50%,-50%);
-  z-index:4;
-}
-.cube-portrait.ara::after{
-  content:'';
-  position:absolute;inset:2.5% 7% auto auto;
-  width:84%;height:93%;
-  border:none;
-  border-right:2px solid rgba(0,212,255,0.75);
-  border-bottom:2px solid rgba(0,212,255,0.75);
-  border-radius:10px;
-  transform:translate(10px,10px);
-  z-index:-1;
-  box-shadow:none;
-}
-.cube-portrait.ara img{
-  border-radius:10px;
-  border:none;
-  box-shadow:0 20px 44px rgba(0,0,0,0.42);
 }
 .cube-portrait.reveal img{
   opacity:0;
@@ -311,9 +286,6 @@ h1 .outline-word{
   display:block;
 }
 h1 .final-word{display:block}
-.hero-title .final-word{
-  font-size:0.62em;
-}
 .hero-script{
   font-family:'Allura',cursive;
   font-size:1.2em;
@@ -489,11 +461,6 @@ section{padding:7rem 4vw;position:relative;z-index:1}
 .a-q .aq-icon{color:var(--electric);flex-shrink:0;margin-top:3px;font-size:0.7rem}
 
 .about-actions{margin-top:2.5rem;display:flex;gap:1rem;flex-wrap:wrap}
-.team-avatars{display:flex;gap:0.65rem;margin-bottom:1rem}
-.team-avatars img{
-  width:58px;height:58px;border-radius:50%;
-  object-fit:cover;border:1px solid var(--border);
-}
 
 /* glass card */
 .glass-card{
@@ -847,9 +814,6 @@ footer a:hover{color:var(--electric)}
   letter-spacing:normal !important;
   text-transform:none !important;
 }
-#pre-contact{border-top:1px solid var(--border2)}
-.pre-contact-inner{max-width:980px;margin:0 auto;text-align:center}
-.pre-contact-inner p{max-width:740px;margin:0.9rem auto 0;color:var(--dim)}
 
 /* ─── FLOATING CHAT + WHATSAPP ─── */
 .floating-chat{
@@ -957,7 +921,6 @@ footer a:hover{color:var(--electric)}
   }
   .cube-portrait.reveal{transform:translate(-50%,-46%) translateY(30px)}
   .cube-portrait.reveal.in{transform:translate(-50%,-46%)}
-  .cube-portrait.ara{display:none}
   .about-grid{grid-template-columns:1fr;gap:3rem}
   .proc-track{grid-template-columns:1fr 1fr}
   .proc-track::before{display:none}
@@ -1039,31 +1002,25 @@ footer a:hover{color:var(--electric)}
 
       <h1 class="hero-title reveal" style="transition-delay:.1s">
         <span class="outline-word">TURN VISITORS</span>
-        <span class="blue-word">INTO CLIENTS.</span>
-        <span class="final-word">HI, WE'RE <span class="hero-script">Julia</span> & <span class="hero-script">Ara</span>.</span>
+        <span class="blue-word">INTO CUSTOMERS.</span>
+        <span class="final-word">HI, I'M <span class="hero-script">Julia.</span></span>
       </h1>
 
       <p class="hero-sub reveal" style="transition-delay:.18s">
-        We build high-converting websites, AI assistants, and marketing systems that bring you consistent clients, not just traffic.
-      </p>
-      <p class="hero-sub reveal" style="transition-delay:.22s;max-width:620px">
-        A fast, clear website that explains what you do in seconds. AI that answers 24/7 and captures leads. And ads + SEO that bring the right people to you. So you get more inquiries, bookings, and sales without chasing leads.
+        I build clear websites and 24/7 AI that answers for you. A fast, simple site that explains what you do in seconds plus an AI assistant that handles FAQs and captures leads, so you close more without babysitting.
       </p>
 
       <div class="h-badges reveal" style="transition-delay:.26s">
         <span class="g-badge">Launch in 1–3 weeks</span>
+        <span class="g-badge">Transparent pricing</span>
         <span class="g-badge">24/7 AI replies</span>
-        <span class="g-badge">FB Ads • Google Ads • SEO</span>
-        <span class="g-badge">Built to convert, not just look good</span>
+        <span class="g-badge">SEO & speed baked in</span>
       </div>
 
       <div class="h-actions reveal" style="transition-delay:.34s">
-        <a href="#contact" class="btn-primary"><i class="fa-solid fa-bolt"></i> Get your plan</a>
+        <a href="#contact" class="btn-primary"><i class="fa-solid fa-bolt"></i> Get my plan</a>
         <a href="#projects" class="btn-outline"><i class="fa-solid fa-eye"></i> See results</a>
       </div>
-      <p class="hero-sub reveal" style="transition-delay:.4s;max-width:670px">
-        Most websites don't have a traffic problem. They have a conversion problem. We fix both. We don't just build your site — we make sure people actually find it, understand it, and take action.
-      </p>
     </div>
 
     <div class="hero-visual">
@@ -1071,10 +1028,6 @@ footer a:hover{color:var(--electric)}
       <div class="cube-portrait reveal" style="transition-delay:.14s">
         <img src="{{ headshot_url }}"
              alt="Julia portrait" loading="eager" referrerpolicy="no-referrer"/>
-      </div>
-      <div class="cube-portrait ara">
-        <img src="https://res.cloudinary.com/dzdi9ndf9/image/upload/v1776054766/2_irnbdh.png"
-             alt="Ara portrait" loading="eager" referrerpolicy="no-referrer"/>
       </div>
     </div>
   </div>
@@ -1101,48 +1054,44 @@ footer a:hover{color:var(--electric)}
   <div class="about-grid">
     <div class="reveal">
       <div class="s-eyebrow">Built for founders & small teams</div>
-      <h2 class="s-title about-title">Want a website that actually gets people <span class="accent">to act?</span></h2>
-      <p class="about-body">Most businesses are losing clients because visitors do not understand what they do fast enough, leads go cold without instant follow-up, traffic does not convert, and everything feels manual and inconsistent.</p>
+      <h2 class="s-title about-title">Want a website that explains what you do<br>and gets people <span class="accent">to act?</span></h2>
+      <p class="about-body">I turn your offer into clear pages and simple flows. Then I add an AI assistant that answers questions, captures leads, and books calls, so you look modern, feel trusted, and stop losing good prospects.</p>
       <div class="about-qs">
-        <div class="a-q"><i class="fa-solid fa-chevron-right aq-icon"></i><span>Visitors don't understand what you do fast enough</span></div>
-        <div class="a-q"><i class="fa-solid fa-chevron-right aq-icon"></i><span>No one follows up instantly, so leads go cold</span></div>
-        <div class="a-q"><i class="fa-solid fa-chevron-right aq-icon"></i><span>Traffic comes in, but doesn't convert</span></div>
-        <div class="a-q"><i class="fa-solid fa-chevron-right aq-icon"></i><span>Everything feels manual and inconsistent</span></div>
+        <div class="a-q"><i class="fa-solid fa-chevron-right aq-icon"></i><span><strong>Need to launch fast</strong> without messy handoffs and endless edits?</span></div>
+        <div class="a-q"><i class="fa-solid fa-chevron-right aq-icon"></i><span><strong>Wish visitors got instant answers</strong> so they don't bounce or ghost?</span></div>
+        <div class="a-q"><i class="fa-solid fa-chevron-right aq-icon"></i><span><strong>Want fewer manual follow-ups</strong> and more booked calls or inquiries?</span></div>
+        <div class="a-q"><i class="fa-solid fa-chevron-right aq-icon"></i><span><strong>Ready to look current</strong> and still keep things simple for your team?</span></div>
       </div>
-      <p class="about-body" style="margin-top:1.1rem">That's where we come in. We turn your website into a system that attracts the right people, answers questions instantly, and turns visitors into leads or booked calls.</p>
+      <p class="about-body" style="margin-top:1.1rem">If you nodded "yes" to any of these, you're in the right place.</p>
       <div class="about-actions">
-        <a href="#projects" class="btn-outline">See results</a>
-        <a href="#contact" class="btn-primary"><i class="fa-solid fa-bolt"></i> Get your plan</a>
+        <a href="#projects" class="btn-outline">See examples</a>
+        <a href="#contact" class="btn-primary"><i class="fa-solid fa-bolt"></i> Get a simple plan</a>
       </div>
     </div>
 
     <div class="glass-card reveal" style="transition-delay:.15s">
       <div class="gc-head">
-        <h3>Hi, we're Julia & Ara.</h3>
-        <span class="gc-badge">Built for growth</span>
+        <h3>Quick facts</h3>
+        <span class="gc-badge">Information Technology Graduate</span>
       </div>
       <div class="gc-body">
-        <div class="team-avatars">
-          <img src="{{ headshot_url }}" alt="Julia"/>
-          <img src="https://res.cloudinary.com/dzdi9ndf9/image/upload/v1776054766/2_irnbdh.png" alt="Ara"/>
-        </div>
         <dl class="gc-dl">
-          <div><dt>Julia</dt><dd>Websites, AI systems, conversion-focused builds</dd></div>
-          <div><dt>Ara</dt><dd>Marketing, ads, and growth strategy</dd></div>
-          <div><dt>Together</dt><dd>Traffic + conversion + client acquisition systems</dd></div>
-          <div><dt>Approach</dt><dd>No fluff. No unnecessary tech.</dd></div>
+          <div><dt>Based in</dt><dd>Philippines</dd></div>
+          <div><dt>Specialty</dt><dd>Websites & AI Integrations</dd></div>
+          <div><dt>Stack</dt><dd>Python • Django • JavaScript • HTMX/Alpine • Tailwind • PostgreSQL • APIs • OpenAI • Docker</dd></div>
+          <div><dt>Speaking</dt><dd>AI, Careers, Inclusive Tech</dd></div>
         </dl>
       </div>
       <div class="gc-promise">
         <i class="fa-solid fa-shield-halved"></i>
-        <span>Just systems that help your business grow.</span>
+        <span>Promise: clear communication, kind collaboration, and practical tech so no one gets left behind.</span>
       </div>
       <div class="gc-chips">
-        <span class="gc-chip">Traffic</span>
-        <span class="gc-chip">Conversion</span>
-        <span class="gc-chip">Leads</span>
-        <span class="gc-chip">Bookings</span>
-        <span class="gc-chip">Growth</span>
+        <span class="gc-chip">Django REST</span>
+        <span class="gc-chip">Postgres</span>
+        <span class="gc-chip">Stripe/Payments</span>
+        <span class="gc-chip">OpenAI</span>
+        <span class="gc-chip">SEO & Performance</span>
       </div>
     </div>
   </div>
@@ -1153,9 +1102,9 @@ footer a:hover{color:var(--electric)}
   <div class="svc-inner">
     <div class="svc-top reveal">
       <div>
-        <div class="s-eyebrow">Core Offer</div>
-        <h2 class="s-title">Built for <span class="accent">results.</span></h2>
-        <p class="hero-sub" style="margin-top:0.9rem;max-width:620px">Simple, clear offers designed to get you inquiries, bookings, and sales.</p>
+        <div class="s-eyebrow">How I can help</div>
+        <h2 class="s-title">Which result do you want <span class="accent">first?</span></h2>
+        <p class="hero-sub" style="margin-top:0.9rem;max-width:620px">Pick the lever that moves your business now — then I keep improving it, step by step.</p>
       </div>
       <a href="#contact" class="btn-primary"><i class="fa-solid fa-bolt"></i> Start a project</a>
     </div>
@@ -1163,71 +1112,68 @@ footer a:hover{color:var(--electric)}
       <div class="svc-card reveal" style="transition-delay:.05s">
         <div class="sc-num">01</div>
         <div class="sc-icon-wrap"><i class="fa-solid fa-desktop"></i></div>
-        <h3>High-Converting Websites</h3>
-        <p>We don't design for looks, we design for action.</p>
+        <h3>Need a site that wins trust & leads?</h3>
+        <p>Clear message, fast pages, easy updates — built to convert on every device.</p>
         <ul class="sc-list">
-          <li>Clear messaging that sells your offer</li>
-          <li>Fast, mobile-first pages</li>
-          <li>Built-in SEO foundation</li>
-          <li>Bookings, forms, and payments ready</li>
+          <li>Home, Offer & Contact flows that make action obvious</li>
+          <li>Bookings, forms, or payments wired in</li>
+          <li>Speed + SEO engineered from day one</li>
         </ul>
         <div class="sc-foot">
-          <span class="sc-pill">Result: more inquiries, calls, and conversions</span>
-          <a href="#projects" class="sc-link">See results →</a>
+          <span class="sc-pill">Launch-ready</span>
+          <a href="#projects" class="sc-link">See examples →</a>
         </div>
       </div>
 
       <div class="svc-card reveal" style="transition-delay:.1s">
         <div class="sc-num">02</div>
         <div class="sc-icon-wrap"><i class="fa-solid fa-brain"></i></div>
-        <h3>AI Assistants (24/7 Lead Capture)</h3>
-        <p>Never miss a lead again.</p>
+        <h3>Want customers to get answers 24/7?</h3>
+        <p>Add a helpful assistant to your site or chat apps so fewer people bounce or ghost.</p>
         <ul class="sc-list">
-          <li>Answers FAQs instantly</li>
-          <li>Captures leads automatically</li>
-          <li>Books calls while you sleep</li>
-          <li>Works on website, Messenger, WhatsApp</li>
+          <li>Handles FAQs, captures leads, books calls</li>
+          <li>Works on WhatsApp / Messenger too</li>
+          <li>Automates simple tasks & handoffs</li>
         </ul>
         <div class="sc-foot">
-          <span class="sc-pill">Result: fewer missed opportunities, more conversions</span>
+          <span class="sc-pill">Friendly & on-brand</span>
           <a href="#contact" class="sc-link">Ask how it fits →</a>
         </div>
       </div>
 
       <div class="svc-card reveal" style="transition-delay:.15s">
         <div class="sc-num">03</div>
-        <div class="sc-icon-wrap"><i class="fa-solid fa-bullhorn"></i></div>
-        <h3>Marketing That Brings Clients</h3>
-        <p>Traffic is useless if it doesn't convert. We bring the right people and turn them into clients.</p>
+        <div class="sc-icon-wrap"><i class="fa-solid fa-microphone-lines"></i></div>
+        <h3>Team needs a gentle push into AI?</h3>
+        <p>Talks and hands-on sessions that build confidence — no jargon, just useful habits.</p>
         <ul class="sc-list">
-          <li>Facebook & Instagram Ads (lead generation)</li>
-          <li>Google Ads (high-intent buyers)</li>
-          <li>SEO (long-term organic traffic)</li>
-          <li>Conversion tracking + optimization</li>
+          <li>Student talks & community workshops</li>
+          <li>Team training with real workflows</li>
+          <li>Practical, kind, and inclusive</li>
         </ul>
         <div class="sc-foot">
-          <span class="sc-pill">Result: consistent, predictable flow of leads</span>
-          <a href="#contact" class="sc-link">Ask how it fits →</a>
+          <span class="sc-pill">On-site or online</span>
+          <a href="#contact" class="sc-link">Invite me →</a>
         </div>
       </div>
 
       <div class="svc-card reveal" style="transition-delay:.2s">
         <div class="sc-num">04</div>
         <div class="sc-icon-wrap"><i class="fa-solid fa-screwdriver-wrench"></i></div>
-        <h3>Ongoing Growth</h3>
-        <p>We don't stop at launch. We improve results every month.</p>
+        <h3>Want someone to keep it running?</h3>
+        <p>I maintain, monitor, and polish monthly — so you can focus on the work that pays.</p>
         <ul class="sc-list">
-          <li>Website updates & improvements</li>
-          <li>Ad optimization</li>
-          <li>SEO growth</li>
-          <li>Conversion rate improvements</li>
+          <li>Updates, backups, quick fixes</li>
+          <li>Content edits & small improvements</li>
+          <li>Speed & uptime checks</li>
         </ul>
         <div class="sc-foot">
-          <span class="sc-pill">Result: more clients over time, not just at launch</span>
+          <span class="sc-pill">Peace of mind</span>
           <a href="#contact" class="sc-link">Ask about plans →</a>
         </div>
       </div>
     </div>
+    <p style="margin-top:1.5rem;font-size:0.85rem;color:rgba(255,255,255,0.9);letter-spacing:0.05em" class="reveal">Not sure what you need? Tell me your goal and budget — I'll suggest the quickest path.</p>
   </div>
 </section>
 
@@ -1235,29 +1181,30 @@ footer a:hover{color:var(--electric)}
 <section id="process">
   <div class="proc-inner">
     <div class="reveal">
-      <div class="s-eyebrow">Process</div>
-      <h2 class="s-title">Simple. Clear. Built for <span class="accent">results.</span></h2>
+      <div class="s-eyebrow">How I work with you</div>
+      <h2 class="s-title">Your goals. Your pace. Your <span class="accent">win.</span></h2>
+      <p class="hero-sub" style="margin-top:0.9rem;max-width:700px">You call the shots. I make it effortless. Clear choices, steady momentum, and results you can point to.</p>
     </div>
     <div class="proc-track">
       <div class="proc-step reveal" style="transition-delay:.05s">
         <div class="p-circle">01</div>
-        <h3>Strategy</h3>
-        <p>We identify the fastest way to get you clients.</p>
+        <h3>Plan around your outcomes</h3>
+        <p>You tell me the win you want. I shape a simple scope, timeline, and budget — approved by you.</p>
       </div>
       <div class="proc-step reveal" style="transition-delay:.1s">
         <div class="p-circle">02</div>
-        <h3>Build</h3>
-        <p>We create your website, AI, and systems.</p>
+        <h3>Blueprint in your language</h3>
+        <p>No jargon — just clear screens and flows. You review, keep what you love, and I lock it in with you.</p>
       </div>
       <div class="proc-step reveal" style="transition-delay:.15s">
         <div class="p-circle">03</div>
-        <h3>Launch</h3>
-        <p>You go live with everything ready to convert.</p>
+        <h3>Build with your feedback loop</h3>
+        <p>Weekly clickable drops. You test, I refine. Fast iterations so every step feels like progress.</p>
       </div>
       <div class="proc-step reveal" style="transition-delay:.2s">
         <div class="p-circle">04</div>
-        <h3>Scale</h3>
-        <p>We drive traffic and improve results continuously.</p>
+        <h3>Launch like a pro — on your terms</h3>
+        <p>Confident go-live, quick how-to, and clean handoff. Keep me on for care and growth if you'd like.</p>
       </div>
     </div>
     <div class="proc-promises">
@@ -1271,7 +1218,7 @@ footer a:hover{color:var(--electric)}
       </div>
       <div class="pp reveal" style="transition-delay:.2s">
         <div class="pp-icon"><i class="fa-solid fa-shield-halved"></i></div>
-        <div><h4>No fluff</h4><p>No unnecessary tech. Just systems that help your business grow.</p></div>
+        <div><h4>On your side</h4><p>Kind, patient, and reliable — so your team feels supported, not overwhelmed.</p></div>
       </div>
     </div>
     <div class="proc-cta reveal"><a href="#contact" class="btn-primary"><i class="fa-solid fa-bolt"></i> Map my plan</a></div>
@@ -1328,23 +1275,15 @@ footer a:hover{color:var(--electric)}
   </div>
 </section>
 
-<section id="pre-contact">
-  <div class="pre-contact-inner reveal">
-    <div class="s-eyebrow">Not sure what you need?</div>
-    <h2 class="s-title">Tell us your goal and budget.</h2>
-    <p>We'll recommend the simplest way to start. No pressure. Just clarity.</p>
-  </div>
-</section>
-
 <!-- CONTACT -->
 <section id="contact">
   <div class="contact-inner">
     <div class="contact-wrap reveal">
       <div class="sphere-deco"></div>
       <div class="c-left">
-        <div class="s-eyebrow" style="margin-bottom:1.5rem">Let's build something that actually brings you clients</div>
-        <h2 class="contact-title">Tell us what you need —<br>website, ads, AI,<br>or <em class="no-orphan">all of it.</em></h2>
-        <p>We'll map out the fastest way to results. We reply within 1 business day.</p>
+        <div class="s-eyebrow" style="margin-bottom:1.5rem">Let's build something great</div>
+        <h2 class="contact-title">Tell me what you need —<br>website, AI assistant,<br>automations, or a <em class="no-orphan">speaking invite.</em></h2>
+        <p>I reply within 1 business day.</p>
         <div class="c-details">
           <div class="c-row"><i class="fa-solid fa-clock"></i><span>Reply within 1 business day</span></div>
           <div class="c-row"><i class="fa-solid fa-location-dot"></i><span>Philippines — works globally</span></div>
@@ -1383,7 +1322,7 @@ footer a:hover{color:var(--electric)}
           <div class="fg"><label>Tell me a bit about it</label><textarea name="message" rows="4" required placeholder="What are you trying to build? What does success look like?"></textarea></div>
           <div class="form-foot">
             <span class="form-note">By sending, you agree to be contacted by email.</span>
-            <button type="submit" class="btn-primary"><i class="fa-solid fa-paper-plane"></i> Get your plan now</button>
+            <button type="submit" class="btn-primary"><i class="fa-solid fa-paper-plane"></i> Send message</button>
           </div>
         </form>
       </div>
@@ -1392,7 +1331,7 @@ footer a:hover{color:var(--electric)}
 </section>
 
 <footer>
-  <p>Websites • AI Systems • Marketing • Growth · © 2026 Julia & Ara</p>
+  <p>Let’s build something people need. · Websites • AI tools • Coaching • Speaking · © 2026 Julia Victorio. All rights reserved.</p>
   <div class="footer-right">
     <a href="mailto:juliavictorio16@gmail.com">juliavictorio16@gmail.com</a>
     <div class="footer-social">
